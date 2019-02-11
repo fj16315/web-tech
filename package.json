@@ -1,0 +1,29 @@
+{
+  "name": "web_tech",
+  "version": "0.0.0",
+  "description": "A website to help organise meals throughout the week.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test_command"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fj16315/web-tech.git"
+  },
+  "keywords": [
+    "Food",
+    "organisation",
+    "recipes",
+    "meal",
+    "cooking"
+  ],
+  "author": "Joseph Mills, Freddie Jones",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/fj16315/web-tech/issues"
+  },
+  "homepage": "https://github.com/fj16315/web-tech#readme",
+  "dependencies": {
+    "react": "^16.8.1"
+  }
+}
