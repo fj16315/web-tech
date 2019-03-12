@@ -4,6 +4,15 @@
 let HTTP = require('http');
 let FS = require('fs').promises;
 let OK = 200, NotFound = 404, BadType = 415;
+/*
+let types = {
+  html : 'application/xhtml+xml',
+  css  : 'text/css',
+  js   : 'application/javascript',
+  png  : 'image/png',
+  jpg  : 'image/jpg'
+};
+*/
 start(8080);
 
 // Provide a service to localhost only.
@@ -18,17 +27,34 @@ function start(port) {
 async function handle(request, response) {
   let url = request.url;
   if (url.endsWith("/")) url = url + "index.html";
-  if (! url.endsWith(".html")) return fail(response, BadType, "Not .html");
+  if (! url.endsWith(".html") && ! url.endsWith(".css") && ! url.endsWith(".jpg") && ! url.endsWith(".png")){
+    return fail(response, BadType, "Not .html or .css");
+  }
   let file = "./site/public" + url;
+
+  let type;
+  if(url.endsWith(".html")){
+    type = 'application/xhtml+xml';
+  }
+  if(url.endsWith(".css")){
+    type = 'text/css';
+  }
+  if(url.endsWith(".png")){
+    type = 'image/png';
+  }
+  if(url.endsWith(".jpg")){
+    type = 'image/jpg';
+  }
+
   let content;
   try { content = await FS.readFile(file); }
   catch (err) { return fail(response, NotFound, "Not found"); }
-  reply(response, content);
+  reply(response, content, type);
 }
 
 // Send a reply.
-function reply(response, content) {
-  let hdrs = { 'Content-Type': 'application/xhtml+xml' };
+function reply(response, content, type) {
+  let hdrs = { 'Content-Type': type };
   response.writeHead(OK, hdrs);
   response.write(content);
   response.end();
