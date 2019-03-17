@@ -29,8 +29,18 @@ lang="en-GB" xml:lang="en-GB">
           <li class="active"><a href="about.html">About</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">A search bar</a></li>
-          <li><a href="/login.html">Sign in</a></li>
+          <form class="navbar-form navbar-left" action="/action_page.php">
+            <div class="input-group" id="searchBar">
+              <input type="text" class="form-control" placeholder="Search"/>
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="submit" id="searchButton">
+                  <i class="glyphicon glyphicon-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+          <li><a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+          <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
         </ul>
       </div>
     </div>
