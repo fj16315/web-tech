@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB">
+  <head>
+    <title>TestPage</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="index.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="row">
+      <div class="col-sm-10">
+        <h1>User name</h1>
+      </div>
+        <div class="col-sm-2">
+          <a href="#" class="pull-right"><img title="profile image" class="img-circle img-responsive" src="#"/></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <!--left col-->
+        <ul class="list-group">
+          <li class="list-group-item">Profile</li>
+          <li class="list-group-item text-right"><span class="pull-left"><strong>Joined</strong></span> a day?</li>
+          <li class="list-group-item text-right"><span class="pull-left"><strong>Recipes</strong></span> 1</li>
+          <li class="list-group-item text-right"><span class="pull-left"><strong>Another thing?</strong></span> Something here</li>
+        </ul>
+
+        <ul class="list-group">
+          <li class="list-group-item text-muted">Activity?</li>
+          <li class="list-group-item text-right"><span class="pull-left"><strong>Shares</strong></span> 125</li>
+          <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
+          <li class="list-group-item text-right"><span class="pull-left"><strong>Posts</strong></span> 37</li>
+          <li class="list-group-item text-right"><span class="pull-left"><strong>Followers</strong></span> 78</li>
+        </ul>
+      </div>
+      <!--/col-3-->
+      <div class="col-sm-9">
+        <ul class="nav nav-tabs" id="myTab">
+          <li class="home"><a href="#home" data-toggle="tab">Home</a></li>
+          <li><a href="#yourRecipes" data-toggle="tab">Your Recipes</a></li>
+          <li><a href="#accountDetails" data-toggle="tab">Account Details</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="home">
+            <p>Some stuff here?</p>
+          </div>
+          <div class="tab-pane" id="yourRecipes">
+            <p>A thing</p>
+          </div>
+          <div class="tab-pane" id="accountDetails">
+            <form class="form" action="##" method="#" id="registrationForm">
+
+              <div class="form-group">
+                <div class="col-xs-6">
+                  <label for="first_name">
+                    <h4>First Name</h4>
+                  </label>
+                  <input type="text" class="form-control" name="first_name" id="first_name" placeholder="first name" title="Enter your first name"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-xs-6">
+                  <label for="second_name">
+                    <h4>Second Name</h4>
+                  </label>
+                  <input type="text" class="form-control" name="second_name" id="second_name" placeholder="second name" title="Enter your second name"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-xs-6">
+                  <label for="email">
+                    <h4>Email</h4>
+                  </label>
+                  <input type="text" class="form-control" name="email" id="email" placeholder="Email" title="Enter your email"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-xs-6">
+                  <label for="password">
+                    <h4>Password</h4>
+                  </label>
+                  <input type="text" class="form-control" name="password" id="password" placeholder="password" title="Enter your password"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-xs-6">
+                  <label for="verify">
+                    <h4>Verify</h4>
+                  </label>
+                  <input type="text" class="form-control" name="verify" id="verify" placeholder="verify" title="veriyfy password"/>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-xs-12">
+                  <button class="btn btn-lg btn-success" type="submit"><i class="glyphicon glyphicon-ok-sign"></i>Save</button>
+                  <button class="btn btn-lg" type="reset"><i class="glyphicon glyphicon-repeat"></i>Reset</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
