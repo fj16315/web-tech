@@ -14,3 +14,20 @@
   background-size: cover;
   background-position: center;
 }
+
+footer{
+  width = 100%;
+  background-color: #618985;
+  padding: 3%;
+  color: #FFF;
+}
+
+.fa{
+  padding: 15px;
+  font-size: 25px;
+  color: #FFF;
+}
+.fa:hover{
+  color: #D5D5D5;
+  text-decoration: none;
+}
