@@ -27,7 +27,7 @@ function start(port) {
 async function handle(request, response) {
   let url = request.url;
   if (url.endsWith("/")) url = url + "index.html";
-  if (! url.endsWith(".html") && ! url.endsWith(".css") && ! url.endsWith(".jpg") && ! url.endsWith(".jpeg") && ! url.endsWith(".png") && ! url.endsWith(".js")){
+  if (! url.endsWith(".html") && ! url.endsWith(".css") && ! url.endsWith(".jpg") && ! url.endsWith(".jpeg") && ! url.endsWith(".png") && ! url.endsWith(".js") && ! url.endsWith(".ico")){
     return fail(response, BadType, "Not .html or .css or other things");
   }
   let file = "./site/public" + url;
@@ -50,6 +50,10 @@ async function handle(request, response) {
   }
   if(url.endsWith(".js")){
     type = 'text/js';
+  }
+  if(url.endsWith(".ico")){
+    type = 'image/x-icon';
+    file = "./site/public/imgs/pot.ico";
   }
 
   let content;
