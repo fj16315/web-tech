@@ -53,7 +53,7 @@ async function handle(request, response) {
   }
   if(url.endsWith(".ico")){
     type = 'image/ico';
-    file = "./site/public/imgs/pot.ico";
+    file = "./site/public/imgs/pot.png";
   }
 
   let content;
