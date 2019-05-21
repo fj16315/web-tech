@@ -52,7 +52,7 @@ async function handle(request, response) {
     type = 'text/js';
   }
   if(url.endsWith(".ico")){
-    type = 'image/x-icon';
+    type = 'image/ico';
     file = "./site/public/imgs/pot.ico";
   }
 
