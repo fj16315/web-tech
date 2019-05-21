@@ -27,8 +27,8 @@ function start(port) {
 async function handle(request, response) {
   let url = request.url;
   if (url.endsWith("/")) url = url + "index.html";
-  if (! url.endsWith(".html") && ! url.endsWith(".css") && ! url.endsWith(".jpg") && ! url.endsWith(".jpeg") && ! url.endsWith(".png")){
-    return fail(response, BadType, "Not .html or .css");
+  if (! url.endsWith(".html") && ! url.endsWith(".css") && ! url.endsWith(".jpg") && ! url.endsWith(".jpeg") && ! url.endsWith(".png") && ! url.endsWith(".js")){
+    return fail(response, BadType, "Not .html or .css or other things");
   }
   let file = "./site/public" + url;
 
@@ -47,6 +47,9 @@ async function handle(request, response) {
   }
   if(url.endsWith(".jpeg")){
     type = 'image/jpeg';
+  }
+  if(url.endsWith(".js")){
+    type = 'text/js';
   }
 
   let content;

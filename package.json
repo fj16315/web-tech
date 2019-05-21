@@ -26,5 +26,6 @@
   "dependencies": {
     "q-io": "^1.13.6",
     "react": "^16.8.1"
-  }
+  },
+  "devDependencies": {}
 }
