@@ -7,9 +7,12 @@
   font-size: 1.2em;
   border: 0;
 }
+
 .navbar-brand{
   float: left;
   min-height: 55px;
+  /* max-height: 10px; */
+  max-width:  200px;
   padding: 0 15px 15px;
 }
 
