@@ -66,6 +66,17 @@
   margin: 1% auto;
 }
 
+.loading{
+  width: 197px;
+  height: 121px;
+  background: url('imgs/loadingSprite.png') left center;
+  animation: play .8s steps(10) infinite;
+}
+
+@keyframes play {
+   100% { background-position: -2030px; }
+}
+
 footer{
   width = 100%;
   background-color: #618985;
