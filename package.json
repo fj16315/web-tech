@@ -24,9 +24,14 @@
   },
   "homepage": "https://github.com/fj16315/web-tech#readme",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.17.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "q-io": "^1.13.6",
-    "react": "^16.8.1"
+    "react": "^16.8.1",
+    "reload": "^3.0.1",
+    "sqlite3": "^4.0.8"
   },
   "devDependencies": {}
 }
