@@ -117,3 +117,9 @@ app.get('/profile.html', protected, function(req, res, next) {
     }
   });
 });
+
+app.get('/GetUsername', protected, function(req, res, next) {
+  console.log("Username requested");
+  res.send(req.user.username);
+  next();
+});

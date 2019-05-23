@@ -37,6 +37,7 @@
   "devDependencies": {
     "connect-sqlite3": "^0.9.11",
     "cookie-parser": "^1.4.4",
-    "express-session": "^1.16.1"
+    "express-session": "^1.16.1",
+    "nodemon": "^1.19.0"
   }
 }
