@@ -3,6 +3,7 @@
 // When the global data has been initialised, start the server.
 
 let express = require('express');
+let fs = require("fs");
 let app = express();
 let sql = require('sqlite3');
 let passport = require('passport');
@@ -13,6 +14,8 @@ let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let SQLiteStore = require('connect-sqlite3')(session);
 let db = new sql.Database("data.db");
+let banned = [];
+banUpperCase("./", "");
 
 let server = app.listen(8080, start);
 
@@ -20,6 +23,37 @@ function start() {
   let host = server.address().address;
   let port = server.address().port;
   console.log("%s:%s", host, port);
+}
+
+// Make the URL lower case.
+function lower(req, res, next) {
+    req.url = req.url.toLowerCase();
+    next();
+}
+
+// Forbid access to the URLs in the banned list.
+function ban(req, res, next) {
+    for (var i=0; i<banned.length; i++) {
+        var b = banned[i];
+        if (req.url.startsWith(b)) {
+            res.status(404).send("Filename not lower case");
+            return;
+        }
+    }
+    next();
+}
+
+function banUpperCase(root, folder) {
+    var folderBit = 1 << 14;
+    var names = fs.readdirSync(root + folder);
+    for (var i=0; i<names.length; i++) {
+        var name = names[i];
+        var file = folder + "/" + name;
+        if (name != name.toLowerCase()) banned.push(file.toLowerCase());
+        var mode = fs.statSync(root + file).mode;
+        if ((mode & folderBit) == 0) continue;
+        banUpperCase(root, file);
+    }
 }
 
 let sessionOpts = {
@@ -30,6 +64,8 @@ let sessionOpts = {
   cookie: { httpOnly: true, maxAge: (4*60*60*1000)}
 }
 
+app.use(lower);
+app.use(ban);
 app.use(express.static('site/public'));
 app.use(cookieParser('sneaky'));
 app.use(bodyParser.json());
@@ -78,7 +114,7 @@ app.get('/index.html', function(req, res, next) {
   let options = {
     root: __dirname + '/site'
   };
-
+  res.header("Content-Type", "application/xhtml+xml");
   res.sendFile('/index.html', options, function(err) {
     if (err) {
       next(err);
@@ -92,7 +128,7 @@ app.get('/login.html', function(req, res, next) {
   let options = {
     root: __dirname + '/site'
   };
-
+  res.header("Content-Type", "application/xhtml+xml");
   res.sendFile('/login.html', options, function(err) {
     if (err) {
       next(err);
@@ -108,7 +144,7 @@ app.get('/profile.html', protected, function(req, res, next) {
   let options = {
     root: __dirname + '/site'
   };
-
+  res.header("Content-Type", "application/xhtml+xml");
   res.sendFile('/profile.html', options, function(err) {
     if (err) {
       next(err);
