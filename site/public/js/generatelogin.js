@@ -11,10 +11,10 @@ function changelogin(){
     if (this.readyState == 4 && this.status == 200) {
       // if it is change the text and links of the HTML
       console.log(this.responseText);
-      if(this.responseText){
+      if(this.responseText == "true"){
         console.log("logged in!");
-        $(".login").replaceWith('<li><a href="/logout"><span class="glyphicon glyphicon-user"></span>logout</a></li>');
         $(".signup").replaceWith('<li><a href="/profile.html"><span class="glyphicon glyphicon-user"></span>profile</a></li>');
+        $(".login").replaceWith('<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>logout</a></li>');
         console.log("Should've changed");
       }
       else {
