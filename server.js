@@ -192,6 +192,34 @@ app.get('/recipes.html', function(req, res, next) {
   });
 });
 
+app.get('/signup.html', function(req, res, next) {
+  let options = {
+    root: __dirname + '/site'
+  };
+
+  res.sendFile('/signup.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
+});
+
+app.get('/searchResults.html', function(req, res, next) {
+  let options = {
+    root: __dirname + '/site'
+  };
+
+  res.sendFile('/searchResults.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
+});
+
 app.get('/isLoggedIn', function(req, res, next) {
   if(req.isAuthenticated()){
     res.send(true);
