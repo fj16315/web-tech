@@ -14,7 +14,7 @@ function changelogin(){
       if(this.responseText == "true"){
         console.log("logged in!");
         $(".signup").replaceWith('<li><a href="/profile.html"><span class="glyphicon glyphicon-user"></span>profile</a></li>');
-        $(".login").replaceWith('<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>logout</a></li>');
+        $(".login").replaceWith('<li><form class="form" action="/logout" method="post"><button><span class="glyphicon glyphicon-log-out"></span>logout</button></form></li>');
         console.log("Should've changed");
       }
       else {

@@ -78,6 +78,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
   db.get('select salt from users where username = ?', username, function(err, row) {
     if (!row) return done(null, false);
     var hash = hashPassword(password, row.salt);
+    console.log(hash);
     db.get('select username, id from users where username = ? and password = ?', username, hash, function(err, row) {
       if (!row) return done(null, false);
       return done(null, row);
