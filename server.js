@@ -190,6 +190,16 @@ app.get('/recipes.html', function(req, res, next) {
   });
 });
 
+app.get('/isLoggedIn', function(req, res, next) {
+  if(req.isAuthenticated()){
+    res.send(true);
+  }
+  else {
+    res.send(false);
+  }
+  next();
+});
+
 app.get('/GetUsername', protected, function(req, res, next) {
   console.log("Username requested");
   res.send(req.user.username);
