@@ -27,24 +27,21 @@ let sessionOpts = {
   resave: true,
   store: new SQLiteStore,
   secret: 'sneaky',
-  cookie: { httpOnly: true, secure: false, maxAge: (4*60*60*1000)}
+  cookie: { httpOnly: true, maxAge: (4*60*60*1000)}
 }
 
-app.use(passport.initialize());
 app.use(express.static('site/public'));
 app.use(cookieParser('sneaky'));
-app.use(session(sessionOpts));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session(sessionOpts));
+app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new LocalStrategy(function(username, password, done) {
-  console.log("Used passport!");
   db.get('select salt from users where username = ?', username, function(err, row) {
     if (!row) return done(null, false);
-    console.log("Password: " + password);
-    console.log("Salt: " + row.salt);
     var hash = hashPassword(password, row.salt);
-    console.log("Hash: " + hash);
     db.get('select username, id from users where username = ? and password = ?', username, hash, function(err, row) {
       if (!row) return done(null, false);
       return done(null, row);
@@ -53,11 +50,10 @@ passport.use(new LocalStrategy(function(username, password, done) {
 }));
 
 passport.serializeUser(function(user, done) {
-  return done(null, user.id);
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
-  console.log("Id in deserialize: " + id)
   db.get('select id, username from users where id = ?', id, function(err, row) {
     if (!row) return done(null, false);
     return done(null, row);
@@ -90,8 +86,6 @@ app.get('/index.html', function(req, res, next) {
       console.log("Sent file");
     }
   });
-
-  console.log("User: " + req.user);
 });
 
 app.get('/login.html', function(req, res, next) {
@@ -108,9 +102,18 @@ app.get('/login.html', function(req, res, next) {
   });
 });
 
-app.post('/login.html', passport.authenticate('local', { successRedirect: '/index.html', failureRedirect: '/login.html' }));
+app.post('/login.html', passport.authenticate('local', { session: true, successRedirect: '/index.html', failureRedirect: '/login.html' }));
 
 app.get('/profile.html', protected, function(req, res, next) {
-  console.log("The user is logged in!");
-  console.log(req.user);
+  let options = {
+    root: __dirname + '/site'
+  };
+
+  res.sendFile('/profile.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
 });
