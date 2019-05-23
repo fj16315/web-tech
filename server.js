@@ -77,21 +77,22 @@ app.use(passport.session());
 passport.use(new LocalStrategy(function(username, password, done) {
   db.get('select salt from users where username = ?', username, function(err, row) {
     if (!row) return done(null, false);
+    console.log("Found matching username");
     var hash = hashPassword(password, row.salt);
-    console.log(hash);
-    db.get('select username, id from users where username = ? and password = ?', username, hash, function(err, row) {
+    db.get('select username, IdU from users where username = ? and password = ?', username, hash, function(err, row) {
       if (!row) return done(null, false);
+      console.log("Found matching username and password");
       return done(null, row);
     });
   });
 }));
 
 passport.serializeUser(function(user, done) {
-  done(null, user.id);
+  done(null, user.IdU);
 });
 
-passport.deserializeUser(function(id, done) {
-  db.get('select id, username from users where id = ?', id, function(err, row) {
+passport.deserializeUser(function(IdU, done) {
+  db.get('select IdU, username from users where IdU = ?', IdU, function(err, row) {
     if (!row) return done(null, false);
     return done(null, row);
   });
@@ -204,5 +205,10 @@ app.get('/isLoggedIn', function(req, res, next) {
 app.get('/GetUsername', protected, function(req, res, next) {
   console.log("Username requested");
   res.send(req.user.username);
+  next();
+});
+
+app.get('/GetRecipes', function(req, res, next) {
+  console.log("Recipes requested");
   next();
 });
