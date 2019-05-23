@@ -13,7 +13,7 @@
   min-height: 55px;
   /* max-height: 10px; */
   max-width:  200px;
-  padding: 0 15px 15px;
+  padding: 10px 15px 15px;
 }
 
 .navbar-inverse .navbar-nav .active a, .navbar-inverse .navbar-nav .active a:focus, .navbar-inverse .navbar-nav .active a:hover{

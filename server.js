@@ -69,12 +69,14 @@ function hashPassword(password, salt) {
 
 function protected(req, res, next) {
   if (!req.isAuthenticated()) {
-    return next(new Error('PH*CK YOU'));
+    res.redirect('/login.html');
+    //return an error
+    return next();
   }
   return next();
 }
 
-app.get('/index.html', function(req, res, next) {
+app.get('/', function(req, res, next) {
   let options = {
     root: __dirname + '/site'
   };
@@ -102,7 +104,27 @@ app.get('/login.html', function(req, res, next) {
   });
 });
 
-app.post('/login.html', passport.authenticate('local', { session: true, successRedirect: '/index.html', failureRedirect: '/login.html' }));
+app.get('/about.html', function(req, res, next) {
+  let options = {
+    root: __dirname + '/site'
+  };
+
+  res.sendFile('/about.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
+});
+
+
+app.post('/login', passport.authenticate('local', { session: true, successRedirect: '/profile.html', failureRedirect: '/login.html' }));
+
+app.post('/logout', function(req, res){
+  req.logout();
+  res.redirect('/login.html');
+});
 
 app.get('/profile.html', protected, function(req, res, next) {
   let options = {
@@ -110,6 +132,20 @@ app.get('/profile.html', protected, function(req, res, next) {
   };
 
   res.sendFile('/profile.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
+});
+
+app.get('/recipes.html', function(req, res, next) {
+  let options = {
+    root: __dirname + '/site'
+  };
+
+  res.sendFile('/recipe_template.html', options, function(err) {
     if (err) {
       next(err);
     } else {

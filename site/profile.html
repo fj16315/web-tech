@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="index.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="js/loadUsername.js"></script>
-    <!-- <script>$(document).ready(function(){document.getElementById('titleUsername').innerHTML = "Chad!" })</script>; -->
+    <script src="js/loadDetails.js"></script>
   </head>
   <body onload="loadUsername();">
     <nav class="navbar navbar-inverse">
@@ -25,7 +24,7 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavBar">
           <ul class="nav navbar-nav navbar-left">
-            <li><a href="index.html">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="recipes.html">Recipes</a></li>
             <li class="active"><a href="about.html">About</a></li>
           </ul>
@@ -88,7 +87,7 @@
             <p>A thing</p>
           </div>
           <div class="tab-pane" id="accountDetails">
-            <form class="form" action="##" method="#" id="registrationForm">
+            <form class="form" action="/logout" method="post" id="registrationForm">
 
               <div class="form-group">
                 <div class="col-xs-6">
