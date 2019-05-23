@@ -160,21 +160,40 @@ app.get('/about.html', function(req, res, next) {
   });
 });
 
-app.post('/signup', function(req, res, next){
+/*app.post('/signup', function(req, res, next){
   console.log("Signing up");
   db.get("select username from users where users.username=?", req.username, function(err, row) {
-  if (row) {
-    return next(err);
-  }
-  console.log("unique username");
-  console.log(req.body.username);
-  console.log(req.body.password);
-  let salt = genRandomSalt();
-  let hash = hashPassword(req.body.password, salt);
-  db.run("insert into users values (?, ?, ?, 0)", req.body.username, hash, salt);
-  next();
+    if (row) {
+      return next(err);
+    }
+    console.log("unique username");
+    console.log(req.body.username);
+    console.log(req.body.password);
+    let salt = genRandomSalt();
+    let hash = hashPassword(req.body.password, salt);
+    db.run("insert into users (username, password, salt, Recipe_Count) values (?, ?, ?, 0)", req.body.username, hash, salt);
+    passport.authenticate('local', { session: true, successRedirect: '/profile.html', failureRedirect: '/login.html' });
+    next();
   });
-});
+});*/
+
+passport.use('local-signup', new LocalStrategy(function(username, password, done) {
+  db.get("select username from users where username = ?", username, function(err, row) {
+    if (err) {
+      return done(err);
+    }
+    if (row) {
+      return done(null, false);
+    } else {
+      let salt = genRandomSalt();
+      let hash = hashPassword(password, salt);
+      db.run("insert into users (username, password, salt, Recipe_Count) values (?, ?, ?, 0)", username, hash, salt);
+      db.get("select IdU, username from users where username = ?", username, function(err, row) {
+        return done(null, row);
+      });
+    }
+  });
+}));
 
 app.post('/login', passport.authenticate('local', { session: true, successRedirect: '/profile.html', failureRedirect: '/login.html' }));
 
@@ -260,3 +279,5 @@ app.get('/GetRecipes', function(req, res, next) {
   console.log("Recipes requested");
   next();
 });
+
+app.post('/signup', passport.authenticate('local-signup', { session: true, successRedirect: '/profile.html', failureRedirect: '/signup.html' }));
