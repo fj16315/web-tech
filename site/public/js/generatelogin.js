@@ -11,11 +11,13 @@ function changelogin(){
     if (this.readyState == 4 && this.status == 200) {
       // if it is change the text and links of the HTML
       console.log(this.responseText);
-      if(this.responseText){
-        console.log("logged in?");
+      if(!this.responseText){
+        console.log("logged in!");
+        document.getElementById("login").innerHTML = "logout";
+        document.getElementById("signup").innerHTML = "profile";
       }
       else {
-        console.log("not logged in?");
+        console.log("not logged in!");
       }
       // document.getElementById("titleUsername").innerHTML = this.responseText;
     }
