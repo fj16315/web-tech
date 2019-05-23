@@ -56,6 +56,10 @@ function banUpperCase(root, folder) {
     }
 }
 
+function genRandomSalt(length){
+  return crypto.randomBytes(Math.ceil(8)).toString('hex').slice(0,16);
+}
+
 let sessionOpts = {
   saveUninitialized: false,
   resave: true,
@@ -156,8 +160,24 @@ app.get('/about.html', function(req, res, next) {
   });
 });
 
+app.post('/signup', function(req, res, next){
+  console.log("Signing up");
+  db.get("select username from users where users.username=?", req.username, function(err, row) {
+  if (row) {
+    return next(err);
+  }
+  console.log("unique username");
+  console.log(req.body.username);
+  console.log(req.body.password);
+  let salt = genRandomSalt();
+  let hash = hashPassword(req.body.password, salt);
+  db.run("insert into users values (?, ?, ?, 0)", req.body.username, hash, salt);
+  next();
+  });
+});
 
 app.post('/login', passport.authenticate('local', { session: true, successRedirect: '/profile.html', failureRedirect: '/login.html' }));
+
 
 app.post('/logout', function(req, res){
   req.logout();
