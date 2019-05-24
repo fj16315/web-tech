@@ -21,8 +21,13 @@ function loadRecipeDetails(str) {
         let a = JSON.parse(this.responseText);
         console.log(a);
 
+        //update saving term
+        $('#searchTerm').replaceWith('<h2 id="searchTerm">Result for <strong>' + str + '</strong></h2>');
+
+        //
+        $('#loading').replaceWith('<div id="notLoading" class="col-xs-12 col-sm-6 col-md-12"><div id="results"></div></div>');
         //Get all the elements and put them in a search result
-        $('#loading').replaceWith('<div id="notLoading" class="col-xs-12 col-sm-6 col-md-12"><h2>Result for ' + str + '</h2><div id="results"></div></div>');
+
         //replace the results with no results!
         if(a.titles.length == 0){
           $('#results').append('<p>No results!</p>');
@@ -44,4 +49,13 @@ function search(){
   console.log("you searched!");
   console.log($("#search").val());
   loadRecipeDetails($("#search").val());
+  return false;
 }
+/*
+$("#searchForm").on('submit', function (e){
+  //search();
+  console.log("you did a thing!");
+
+  e.preventDefault();
+});
+*/

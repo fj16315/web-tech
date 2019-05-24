@@ -28,20 +28,20 @@
         <div class="collapse navbar-collapse" id="myNavBar">
           <ul class="nav navbar-nav navbar-left">
             <li><a href="/">Home</a></li>
-            <li><a href="recipes.html">Recipes</a></li>
-            <li class="active"><a href="about.html">About</a></li>
+            <li class="active"><a href="recipes.html">Recipes</a></li>
+            <li><a href="about.html">About</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <form class="navbar-form navbar-left" method="get" action="/searchResults.html">
+            <div class="navbar-form navbar-left">
               <div class="input-group" id="searchBar">
-                <input type="text" class="form-control" name="search" placeholder="Search"/>
+                <input type="text" id="search" class="form-control" name="search" placeholder="Search"/>
                 <div class="input-group-btn">
-                  <button class="btn btn-default" type="submit" id="searchButton">
+                  <button class="btn btn-default" id="searchButton" onclick="search();">
                     <i class="glyphicon glyphicon-search"></i>
                   </button>
                 </div>
               </div>
-            </form>
+            </div>
             <li id="signup"><a href="signup.html"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
             <li id="login"><a href="login.html"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
           </ul>
@@ -52,7 +52,7 @@
     <div class="container">
       <hgroup>
         <h1>Search Results</h1>
-        <h2 class="searchTerm">Results for <strong>#Replaceme</strong></h2>
+        <h2 id="searchTerm">Results for <strong>#Replaceme</strong></h2>
       </hgroup>
       <div id="searchResults" class="col-xs-12 col-sm-6 col-md-12">
         <div id="notLoading"></div>
