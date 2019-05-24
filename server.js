@@ -292,6 +292,36 @@ app.post('/getSearchResults', function(req, res, next) {
   });
 });
 
+app.post('/getRecipe', function(req, res, next) {
+  //Some sql query to get results
+  // let results = [];
+  // let results = { titles: [], difficulty: [] };
+  let results = { title: [], serves: [], rating: [], steps: []};
+
+  db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
+    if (err) {
+      console.log("Error, no recipe");
+      next(err);
+    } else {
+      console.log("Found recipe");
+      console.log(row);
+      results.title.push(row.Title);
+      results.serves.push(row.Serves);
+      results.serves.push(row.Rating);
+      db.all('select OrderNo, Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
+        if (err) {
+          next(err);
+        } else {
+          for (let i = 0; i < rows.length; i++) {
+            results.steps.push(rows[i]);
+          }
+          res.send(results);
+        }
+      });
+    }
+  });
+});
+
 app.get('/isLoggedIn', function(req, res, next) {
   if(req.isAuthenticated()){
     res.send(true);
