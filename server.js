@@ -1,10 +1,7 @@
-// Server which delivers only static HTML pages (no content negotiation).
-// Response codes: see http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-// When the global data has been initialised, start the server.
+// Initialize npm modules
 
 let express = require('express');
 let fs = require("fs");
-let app = express();
 let sql = require('sqlite3');
 let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
@@ -13,21 +10,48 @@ let session = require('express-session');
 let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let SQLiteStore = require('connect-sqlite3')(session);
-let db = new sql.Database("data.db");
 let ed = require('edit-distance');
+
+// Initialize global variables
+
+let app = express();
+let db = new sql.Database("data.db");
 let banned = [];
 banUpperCase("./", "");
-
 let insert, remove, update;
 insert = remove = function(node) {return 1;};
 update = function(stringA, stringB) {return stringA !== stringB ? 1 : 0; };
-let server = app.listen(8080, start);
+let sessionOpts = {
+  saveUninitialized: false,
+  resave: true,
+  store: new SQLiteStore,
+  secret: 'sneaky',
+  cookie: { httpOnly: true, maxAge: (4*60*60*1000)}
+}
 
-function start() {
+// Start server on specified port
+
+let server = app.listen(8080, function() {
   let host = server.address().address;
   let port = server.address().port;
   console.log("%s:%s", host, port);
-}
+});
+
+// Initialize sessions
+
+app.set('views', './site');
+app.set('view engine', 'pug');
+app.use(lower);
+app.use(ban);
+app.use(express.static('site/public'));
+app.use(cookieParser('sneaky'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session(sessionOpts));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Declare functions
 
 // Make the URL lower case.
 function lower(req, res, next) {
@@ -47,6 +71,7 @@ function ban(req, res, next) {
     next();
 }
 
+// Ban upper case file names
 function banUpperCase(root, folder) {
     var folderBit = 1 << 14;
     var names = fs.readdirSync(root + folder);
@@ -60,30 +85,32 @@ function banUpperCase(root, folder) {
     }
 }
 
+// Generates a random salt for a new user
 function genRandomSalt(length){
   return crypto.randomBytes(Math.ceil(8)).toString('hex').slice(0,16);
 }
 
-let sessionOpts = {
-  saveUninitialized: false,
-  resave: true,
-  store: new SQLiteStore,
-  secret: 'sneaky',
-  cookie: { httpOnly: true, maxAge: (4*60*60*1000)}
+// Finds the hashed password given a password and salt
+function hashPassword(password, salt) {
+  let hash = crypto.createHash('sha256');
+  hash.update(password);
+  hash.update(salt);
+  return hash.digest('hex');
 }
 
-app.set('views', './site');
-app.set('view engine', 'pug');
-app.use(lower);
-app.use(ban);
-app.use(express.static('site/public'));
-app.use(cookieParser('sneaky'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session(sessionOpts));
-app.use(passport.initialize());
-app.use(passport.session());
+// Checks if the user has access to the page
+function protected(req, res, next) {
+  if (!req.isAuthenticated()) {
+    res.redirect('/login');
+    //return an error
+    return next();
+  }
+  return next();
+}
 
+// Set passport authentication functions
+
+// Local strategy for logging in
 passport.use(new LocalStrategy(function(username, password, done) {
   db.get('select salt from users where username = ?', username, function(err, row) {
     if (!row) return done(null, false);
@@ -97,75 +124,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
   });
 }));
 
-passport.serializeUser(function(user, done) {
-  done(null, user.IdU);
-});
-
-passport.deserializeUser(function(IdU, done) {
-  db.get('select IdU, username from users where IdU = ?', IdU, function(err, row) {
-    if (!row) return done(null, false);
-    return done(null, row);
-  });
-});
-
-function hashPassword(password, salt) {
-  let hash = crypto.createHash('sha256');
-  hash.update(password);
-  hash.update(salt);
-  return hash.digest('hex');
-}
-
-function protected(req, res, next) {
-  if (!req.isAuthenticated()) {
-    res.redirect('/login.html');
-    //return an error
-    return next();
-  }
-  return next();
-}
-
-app.get('/', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-  res.header("Content-Type", "application/xhtml+xml");
-  res.sendFile('/index.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
-});
-
-app.get('/login.html', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-  res.header("Content-Type", "application/xhtml+xml");
-  res.sendFile('/login.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
-});
-
-app.get('/about.html', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-
-  res.sendFile('/about.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
-});
-
+// Local strategy for signing up a new user
 passport.use('local-signup', new LocalStrategy(function(username, password, done) {
   db.get("select username from users where username = ?", username, function(err, row) {
     if (err) {
@@ -184,15 +143,68 @@ passport.use('local-signup', new LocalStrategy(function(username, password, done
   });
 }));
 
-app.post('/login', passport.authenticate('local', { session: true, successRedirect: '/profile.html', failureRedirect: '/login.html' }));
-
-
-app.post('/logout', function(req, res){
-  req.logout();
-  res.redirect('/login.html');
+// Gets users ID after login/sign up
+passport.serializeUser(function(user, done) {
+  done(null, user.IdU);
 });
 
-app.get('/profile.html', protected, function(req, res, next) {
+// Adds user to current session
+passport.deserializeUser(function(IdU, done) {
+  db.get('select IdU, username from users where IdU = ?', IdU, function(err, row) {
+    if (!row) return done(null, false);
+    return done(null, row);
+  });
+});
+
+// Get requests for pages
+
+// Get request for home page
+app.get('/', function(req, res, next) {
+  let options = {
+    root: __dirname + '/site'
+  };
+  res.header("Content-Type", "application/xhtml+xml");
+  res.sendFile('/index.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
+});
+
+// Get request for login page
+app.get('/login', function(req, res, next) {
+  let options = {
+    root: __dirname + '/site'
+  };
+  res.header("Content-Type", "application/xhtml+xml");
+  res.sendFile('/login.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
+});
+
+// Get request for about page
+app.get('/about', function(req, res, next) {
+  let options = {
+    root: __dirname + '/site'
+  };
+
+  res.sendFile('/about.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
+});
+
+// Get request for profile page
+app.get('/profile', protected, function(req, res, next) {
   let options = {
     root: __dirname + '/site'
   };
@@ -206,21 +218,8 @@ app.get('/profile.html', protected, function(req, res, next) {
   });
 });
 
-app.get('/recipes.html', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-
-  res.sendFile('/recipe_template.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
-});
-
-app.get('/recipe_template.html', function(req, res, next) {
+// Get request for recipe page
+app.get('/recipe_template', function(req, res, next) {
   db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
     if (err) {
       console.log("Error, no recipe");
@@ -253,7 +252,8 @@ app.get('/recipe_template.html', function(req, res, next) {
   });
 });
 
-app.get('/signup.html', function(req, res, next) {
+// Get request for signup page
+app.get('/signup', function(req, res, next) {
   let options = {
     root: __dirname + '/site'
   };
@@ -267,7 +267,8 @@ app.get('/signup.html', function(req, res, next) {
   });
 });
 
-app.get('/searchResults.html', function(req, res, next) {
+// Get request for search page
+app.get('/searchResults', function(req, res, next) {
   let options = {
     root: __dirname + '/site'
   };
@@ -281,6 +282,41 @@ app.get('/searchResults.html', function(req, res, next) {
   });
 });
 
+// Get requests for updating pages
+
+// Get request for checking if the current user is logged in
+app.get('/isLoggedIn', function(req, res, next) {
+  if(req.isAuthenticated()){
+    res.send(true);
+  }
+  else {
+    res.send(false);
+  }
+  next();
+});
+
+// Get request for getting the current users username
+app.get('/GetUsername', protected, function(req, res, next) {
+  console.log("Username requested");
+  res.send(req.user.username);
+  next();
+});
+
+// Post requests for pages
+
+// Post request for authenticating login
+app.post('/login', passport.authenticate('local', { session: true, successRedirect: '/profile', failureRedirect: '/login' }));
+
+// Post request for authenticating signup
+app.post('/signup', passport.authenticate('local-signup', { session: true, successRedirect: '/profile', failureRedirect: '/signup' }));
+
+// Post request for logging out
+app.post('/logout', function(req, res){
+  req.logout();
+  res.redirect('/login');
+});
+
+// Post request for searching for recipes
 app.post('/getSearchResults', function(req, res, next) {
   console.log("Recipes requested");
   console.log(req.query.search);
@@ -310,6 +346,7 @@ app.post('/getSearchResults', function(req, res, next) {
   });
 });
 
+// Post request for returning correct recipe page
 app.post('/getRecipe', function(req, res, next) {
   //Some sql query to get results
   // let results = [];
@@ -340,24 +377,7 @@ app.post('/getRecipe', function(req, res, next) {
   });
 });
 
-app.get('/isLoggedIn', function(req, res, next) {
-  if(req.isAuthenticated()){
-    res.send(true);
-  }
-  else {
-    res.send(false);
-  }
-  next();
-});
-
-app.get('/GetUsername', protected, function(req, res, next) {
-  console.log("Username requested");
-  res.send(req.user.username);
-  next();
-});
-
-app.post('/signup', passport.authenticate('local-signup', { session: true, successRedirect: '/profile.html', failureRedirect: '/signup.html' }));
-
+// Post request for adding a new recipe
 app.post('/AddRecipe', function(req, res, next) {
   db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
     if (err) {
@@ -379,7 +399,7 @@ app.post('/AddRecipe', function(req, res, next) {
                     if (err) {
                       next (err);
                     } else {
-                      res.redirect('/profile.html');
+                      res.redirect('/profile');
                     }
                   });
                 }
@@ -388,39 +408,6 @@ app.post('/AddRecipe', function(req, res, next) {
           }
         });
       }
-    }
-  });
-});
-
-app.get('/recipe_template.html', function(req, res, next) {
-  db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
-    if (err) {
-      console.log("Error, no recipe");
-      next(err);
-    } else {
-      console.log("Found recipe");
-      console.log(row);
-      db.all('select Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
-        if (err) {
-          next(err);
-        } else {
-          let steps = [];
-          for (let i = 0; i < rows.length; i++) {
-            steps[i] = rows[i].Step;
-          }
-          db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
-            if (err) {
-              next(err);
-            } else {
-              let ingredients = [];
-              for (let i = 0; i < rows.length; i++) {
-                ingredients[i] = rows[i].Quantity + "x " + rows[i].Ingredient;
-              }
-              res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating, steps: steps, ingredients: ingredients});
-            }
-          });
-        }
-      });
     }
   });
 });
