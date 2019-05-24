@@ -14,9 +14,13 @@ let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let SQLiteStore = require('connect-sqlite3')(session);
 let db = new sql.Database("data.db");
+let ed = require('edit-distance');
 let banned = [];
 banUpperCase("./", "");
 
+let insert, remove, update;
+insert = remove = function(node) {return 1;};
+update = function(stringA, stringB) {return stringA !== stringB ? 1 : 0; };
 let server = app.listen(8080, start);
 
 function start() {
@@ -261,13 +265,31 @@ app.get('/searchResults.html', function(req, res, next) {
 
 app.post('/getSearchResults', function(req, res, next) {
   console.log("Recipes requested");
-  //console.log(req.query.q);
-  console.log(req.body.search);
-  //Some sql query to get stuff
+  console.log(req.query.search);
+  //Some sql query to get results
+  // let results = [];
+  // let results = { titles: [], difficulty: [] };
+  let results = { titles: [] };
 
-  //send results
-  res.send("Wow!");
-  next();
+  db.all('select Title from Recipe', function(err, rows) {
+    for (let i = 0; i < rows.length; i++) {
+      let lev = ed.levenshtein(rows[i].Title, req.query.search, insert, remove, update);
+      if(lev.distance <= 2){
+        results.titles.push(rows[i].Title);
+        //results.push({ title: rows[i], difficulty: difficulty[i] })
+      }
+    }
+    //for(each title)
+      //get the edit distance
+    if (err) {
+      console.log("Error, no recipe");
+      next(err);
+    } else {
+      console.log("Found recipe");
+      console.log(results);
+      res.send(results);
+    }
+  });
 });
 
 app.get('/isLoggedIn', function(req, res, next) {

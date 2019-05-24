@@ -1,9 +1,11 @@
-function loadRecipeDetails() {
-  // if(str == ""){
-  //   $('.loading').replaceWith('<h1 class=notLoading>Search for something!</h1>');
-  // }
-  // else{
-    $('.notLoading').replaceWith('<div class=loading></div>');
+function loadRecipeDetails(str) {
+  console.log("loading Recipe");
+  console.log(str);
+  if(str == ""){
+    $('#notLoading').replaceWith('<h1 class="notLoading">Search for something!</h1>');
+  }
+  else{
+    $('#notLoading').replaceWith('<div id="loading"></div>');
     if (window.XMLHttpRequest) {
       // code for IE7+, Firefox, Chrome, Opera, Safari
       xmlhttp = new XMLHttpRequest();
@@ -16,17 +18,27 @@ function loadRecipeDetails() {
         console.log(this.responseText);
         //for length generate each article and put it in an element
 
+        //Get json object from this this.response.jsonobject
+        //foreach(recipe in response );
+        //this.title;
+
         //Get all the elements and put them in a search result
+        $('#loading').replaceWith('<div id="notLoading" class="col-xs-12 col-sm-6 col-md-12"></div>');
 
         //replace the loading bar with these results
-        $('.loading').replaceWith('<h1 class=notLoading>result for: a thing' +'</h1>');
-
+        // $('#notLoading').add('<>');
         //Ingredients?
-
+        //'<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="#" title="lorem-Ipsum" class="thumbnail"><img src="imgs/logos/logo.png" alt="Placeholder" ></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a>' + str + '</a></h3><li><i class="glyphicon glyphicon-time"></i><span>a time?</span></li></ul></div><span class="clearfix borda"></span></aritcle>'
         //Method?
       }
     };
-    xmlhttp.open("POST","getSearchResults" + "?q=test" + "&" + "vegan=true",true);
+    xmlhttp.open("POST","getSearchResults" + "?search=" + str + "&" + "vegan=true",true);
     xmlhttp.send();
-  // }
+  }
+}
+
+function search(){
+  console.log("you searched!");
+  console.log($("#search").val());
+  loadRecipeDetails($("#search").val());
 }
