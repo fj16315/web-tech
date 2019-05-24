@@ -259,6 +259,17 @@ app.get('/searchResults.html', function(req, res, next) {
   });
 });
 
+app.post('/getSearchResults', function(req, res, next) {
+  console.log("Recipes requested");
+  //console.log(req.query.q);
+  console.log(req.body.search);
+  //Some sql query to get stuff
+
+  //send results
+  res.send("Wow!");
+  next();
+});
+
 app.get('/isLoggedIn', function(req, res, next) {
   if(req.isAuthenticated()){
     res.send(true);
@@ -272,11 +283,6 @@ app.get('/isLoggedIn', function(req, res, next) {
 app.get('/GetUsername', protected, function(req, res, next) {
   console.log("Username requested");
   res.send(req.user.username);
-  next();
-});
-
-app.get('/GetRecipes', function(req, res, next) {
-  console.log("Recipes requested");
   next();
 });
 
