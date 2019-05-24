@@ -39,6 +39,7 @@
     "connect-sqlite3": "^0.9.11",
     "cookie-parser": "^1.4.4",
     "express-session": "^1.16.1",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "pug": "^2.0.3"
   }
 }

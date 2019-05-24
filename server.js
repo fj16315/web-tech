@@ -72,6 +72,8 @@ let sessionOpts = {
   cookie: { httpOnly: true, maxAge: (4*60*60*1000)}
 }
 
+app.set('views', './site');
+app.set('view engine', 'pug');
 app.use(lower);
 app.use(ban);
 app.use(express.static('site/public'));
@@ -164,23 +166,6 @@ app.get('/about.html', function(req, res, next) {
   });
 });
 
-/*app.post('/signup', function(req, res, next){
-  console.log("Signing up");
-  db.get("select username from users where users.username=?", req.username, function(err, row) {
-    if (row) {
-      return next(err);
-    }
-    console.log("unique username");
-    console.log(req.body.username);
-    console.log(req.body.password);
-    let salt = genRandomSalt();
-    let hash = hashPassword(req.body.password, salt);
-    db.run("insert into users (username, password, salt, Recipe_Count) values (?, ?, ?, 0)", req.body.username, hash, salt);
-    passport.authenticate('local', { session: true, successRedirect: '/profile.html', failureRedirect: '/login.html' });
-    next();
-  });
-});*/
-
 passport.use('local-signup', new LocalStrategy(function(username, password, done) {
   db.get("select username from users where username = ?", username, function(err, row) {
     if (err) {
@@ -231,6 +216,26 @@ app.get('/recipes.html', function(req, res, next) {
       next(err);
     } else {
       console.log("Sent file");
+    }
+  });
+});
+
+app.get('/recipe_template.html', function(req, res, next) {
+  db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.body.IdR, function(err, row) {
+    if (err) {
+      console.log("Error, no recipe");
+      next(err);
+    } else {
+      console.log("Found recipe");
+      console.log(row);
+      /*db.all('select OrderNo, Step from Steps where IdR = ?', req.body.IdR, function(err, rows) {
+        if (err) {
+          next(err);
+        } else {
+          res.render('recipe_template', )
+        }
+      });*/
+      res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating});
     }
   });
 });
@@ -341,7 +346,7 @@ app.get('/GetUsername', protected, function(req, res, next) {
 app.post('/signup', passport.authenticate('local-signup', { session: true, successRedirect: '/profile.html', failureRedirect: '/signup.html' }));
 
 
-app.get('/recipe_template.html', function(req, res, next) {
+/*app.get('/recipe_template.html', function(req, res, next) {
   let options = {
     root: __dirname + '/site'
   };
@@ -353,4 +358,4 @@ app.get('/recipe_template.html', function(req, res, next) {
       console.log("Sent file");
     }
   });
-});
+});*/
