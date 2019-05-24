@@ -221,21 +221,34 @@ app.get('/recipes.html', function(req, res, next) {
 });
 
 app.get('/recipe_template.html', function(req, res, next) {
-  db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.body.IdR, function(err, row) {
+  db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
     if (err) {
       console.log("Error, no recipe");
       next(err);
     } else {
       console.log("Found recipe");
       console.log(row);
-      /*db.all('select OrderNo, Step from Steps where IdR = ?', req.body.IdR, function(err, rows) {
+      db.all('select Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
         if (err) {
           next(err);
         } else {
-          res.render('recipe_template', )
+          let steps = [];
+          for (let i = 0; i < rows.length; i++) {
+            steps[i] = rows[i].Step;
+          }
+          db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
+            if (err) {
+              next(err);
+            } else {
+              let ingredients = [];
+              for (let i = 0; i < rows.length; i++) {
+                ingredients[i] = rows[i].Quantity + "x " + rows[i].Ingredient;
+              }
+              res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating, steps: steps, ingredients: ingredients});
+            }
+          });
         }
-      });*/
-      res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating});
+      });
     }
   });
 });

@@ -61,19 +61,13 @@ nav.navbar.navbar-inverse
     .col-md-6
       h1 Ingredients
       ul
-        li
-          | 100g of flour
-        li
-          | 1 egg
-        li
-          | 300ml milk
+        each ingredient in ingredients
+          li= ingredient
     .col-md-6
       h1 Method
       ol
-        li
-          | Mix it together
-        li
-          | Put it in the pan
+        each step in steps
+          li= step
 .container
   .row
     h2  Related recipes
