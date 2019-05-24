@@ -339,3 +339,18 @@ app.get('/GetUsername', protected, function(req, res, next) {
 });
 
 app.post('/signup', passport.authenticate('local-signup', { session: true, successRedirect: '/profile.html', failureRedirect: '/signup.html' }));
+
+
+app.get('/recipe_template.html', function(req, res, next) {
+  let options = {
+    root: __dirname + '/site'
+  };
+
+  res.sendFile('/recipe_template.html', options, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("Sent file");
+    }
+  });
+});
