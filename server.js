@@ -358,17 +358,69 @@ app.get('/GetUsername', protected, function(req, res, next) {
 
 app.post('/signup', passport.authenticate('local-signup', { session: true, successRedirect: '/profile.html', failureRedirect: '/signup.html' }));
 
-
-/*app.get('/recipe_template.html', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-
-  res.sendFile('/recipe_template.html', options, function(err) {
+app.post('/AddRecipe', function(req, res, next) {
+  db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
     if (err) {
       next(err);
     } else {
-      console.log("Sent file");
+      let IdR = db.get('select top IdR from Recipe order by IdR desc');
+      for (let i = 0; i < req.query.Steps.length; i++) {
+        db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
+          if (err) {
+            next(err);
+          } else {
+            for (let j = 0; j < req.query.Ingredients.length; j++) {
+              db.run('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end', req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
+                if (err) {
+                  next(err);
+                } else {
+                  let IdI = db.get('select top IdI from Ingredients order by IdI desc');
+                  db.run('if not exists (select 1 from Recipe_Ingredient where IdI = ? and IdR = ?) begin insert into Recipe_Ingredient (IdR, IdI) values (?, ?)', IdI, IdR, IdR, IdI, function(err) {
+                    if (err) {
+                      next (err);
+                    } else {
+                      res.redirect('/profile.html');
+                    }
+                  });
+                }
+              });
+            }
+          }
+        });
+      }
     }
   });
-});*/
+});
+
+app.get('/recipe_template.html', function(req, res, next) {
+  db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
+    if (err) {
+      console.log("Error, no recipe");
+      next(err);
+    } else {
+      console.log("Found recipe");
+      console.log(row);
+      db.all('select Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
+        if (err) {
+          next(err);
+        } else {
+          let steps = [];
+          for (let i = 0; i < rows.length; i++) {
+            steps[i] = rows[i].Step;
+          }
+          db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
+            if (err) {
+              next(err);
+            } else {
+              let ingredients = [];
+              for (let i = 0; i < rows.length; i++) {
+                ingredients[i] = rows[i].Quantity + "x " + rows[i].Ingredient;
+              }
+              res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating, steps: steps, ingredients: ingredients});
+            }
+          });
+        }
+      });
+    }
+  });
+});
