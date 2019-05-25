@@ -12,6 +12,7 @@ function addRecipe(recipe) {
       console.log("sent!");
     }
   };
-  xmlhttp.open("POST","AddRecipe?" + recipe, recipe, true);
-  xmlhttp.send();
+  xmlhttp.open("POST", "AddRecipe", true);
+  xmlhttp.setRequestHeader("Content-Type", "application/json");
+  xmlhttp.send(recipe);
 }

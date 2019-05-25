@@ -12,6 +12,7 @@ let cookieParser = require('cookie-parser');
 let SQLiteStore = require('connect-sqlite3')(session);
 let ed = require('edit-distance');
 let validUrl = require('valid-url');
+let parseJson = require('parse-json');
 
 // Initialize global variables
 
@@ -470,9 +471,11 @@ app.post('/getRecipe', function(req, res, next) {
 // Post request for adding a new recipe
 app.post('/AddRecipe', function(req, res, next) {
   //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
-  console.log("adding recipe!");
-  console.log(req.query);
-  console.log("Tried adding")
+  console.log("--- adding recipe! ---");
+  console.log(req.body);
+  console.log(req.body.Title);
+  console.log("--- Tried adding ---");
+
   // psRunInsertRecipe.run(req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
   //   if (err) {
   //     next(err);
