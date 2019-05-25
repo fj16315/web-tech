@@ -35,7 +35,7 @@ function loadRecipeDetails(str) {
         else{
           //foreach(recipe in response );
           for(let i = 0; i<a.titles.length; i++){
-          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" ></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><li><i class="glyphicon glyphicon-time"></i><span>a time?</span></li></ul></div><span class="clearfix borda"></span></aritcle>');
+          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="' + '/recipe_template?IdR=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" ></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><li><i class="glyphicon glyphicon-time"></i><span>a time?</span></li></ul></div><span class="clearfix borda"></span></aritcle>');
           }
         }
       }
