@@ -270,6 +270,22 @@ app.get('/profile', protected, function(req, res, next) {
   }
 });
 
+app.get('/add_recipe', function(req, res, next) {
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  if (validUrl.isUri(fullUrl)) {
+    res.header("Content-Type", "application/xhtml+xml");
+    res.sendFile('/recipe_creation.html', sendFileOptions, function(err) {
+      if (err) {
+        next(err);
+      } else {
+        console.log("Sent file");
+      }
+    });
+  } else {
+    next(new Error('This is an invalid url'));
+  }
+});
+
 // Get request for recipe page
 app.get('/recipe_template', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;

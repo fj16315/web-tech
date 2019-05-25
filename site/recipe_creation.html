@@ -9,6 +9,7 @@ lang="en-GB" xml:lang="en-GB">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
   <link rel="stylesheet" href="index.css"/>
+  <link rel="stylesheet" href="recipe_add.css"/>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="js/generatelogin.js"></script>
@@ -52,14 +53,14 @@ lang="en-GB" xml:lang="en-GB">
   <div class="container">
     <div class="row">
       <div class="col-md-8">
-        <form action="/addRecipe" method="post" class="form-container">
-          <h1>Recipe Name</h1>
+        <form action="/AddRecipe" method="post" class="form-container">
+          <h1>Adding a new recipe</h1>
           <div class="form-group">
             <label for="title">Recipe Name</label>
             <input type="text" class="form-control" id="title" placeholder="name" name="title"/>
           </div>
-          <div>
-            <label for="difficulty">Select Difficulty</label>
+          <div class="form-group">
+            <label for="difficulty">Recipe Difficulty</label>
             <select class="form-control" id="difficulty" name="difficulty">
               <option value="1">1. Easy. Simple to make with no specfic skills required.</option>
               <option value="2">2. Fairly simple. involves the use of dangerous tools though.</option>
@@ -68,21 +69,42 @@ lang="en-GB" xml:lang="en-GB">
               <option value="5">5. Difficult, either uses advanced techniques or uses very specific tools.</option>
             </select>
           </div>
-          <div>
-            <label for="prepTime">prep time</label>
-            <intput type="number" class="form-control" id="prepTime" name="prepTime"/>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-xs-6">
+                <label for="cookTime">Prep Time</label>
+                <input type="number" class="form-control" id="prepTime" placeholder="prepTime" name="prepTime"/>
+              </div>
+              <div class="col-xs-6">
+                <label for="cookTime">Cook Time</label>
+                <input type="number" class="form-control" id="cookTime" placeholder="cookTime" name="cookTime"/>
+            </div>
+            </div>
           </div>
           <!-- Ingredients -->
           <div>
+            <h3>Ingredients</h3>
             <ul id="ingredients">
-              <input type="text" class="form-control" id="ingredients" name="ingredients">
+              <li>
+                <div class="row">
+                  <div class="col-xs-8">
+                    <label for="ingredients1">Ingredient</label>
+                    <input type="text" class="form-control" id="ingredients1" name="ingredients1"/>
+                  </div>
+                  <div class="col-xs-4">
+                    <label for="quantity1">Quantity</label>
+                    <input type="text"  class="form-control" id="quantity1" name="quantity1"/>
+                  </div>
+                </div>
+              </li>
             </ul>
           </div>
 
           <!-- Method -->
           <div>
+            <h3>Method</h3>
             <ol id="methods">
-              <input type="text" class="form-control" id="method0">
+              <li><input type="text" class="form-control" id="method0"/></li>
             </ol>
           </div>
           <div>
@@ -90,6 +112,9 @@ lang="en-GB" xml:lang="en-GB">
           </div>
         </form>
         <button id="addIngredient" class="btn" onclick="addIngredient();">Add ingredient</button>
+        <button id="removeIngredient" class="btn" onclick="removeIngredient();">Remove ingredient</button>
+        <button id="addMethod" class="btn" onclick="addMethod();">Add Method step</button>
+        <button id="removeMethod" class="btn" onclick="removeMethod();">Remove Method step</button>
       </div>
     </div>
   </div>
