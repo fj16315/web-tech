@@ -32,7 +32,7 @@ function loadUserRecipes(){
         //foreach(recipe in response );
         for(let i = 0; i<a.titles.length; i++){
         // $('#results').append('<h1> Wow! </h1>');
-        $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" /></a></div><div class="col-xs-12 col-xs-4"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><li><i class="glyphicon glyphicon-time"><span>a time?</span></i></li></ul></div><div class="col-xs-12 col-sm-4"><button class="btn btn-danger" onclick="removeRecipe(' + " 'input!'"  + ');">Remove!</button></div><span class="clearfix borda"></span></article>');
+        $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" /></a></div><div class="col-xs-6 col-xs-4"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><li><i class="glyphicon glyphicon-time"><span>a time?</span></i></li></ul></div><div class="col-xs-6 col-sm-4"><button class="btn btn-danger" onclick="removeRecipe(' + " 'input!'"  + ');">Remove!</button></div><span class="clearfix borda"></span></article>');
         }
       }
     }
@@ -42,5 +42,10 @@ function loadUserRecipes(){
 }
 
 function removeRecipe(rId){
-  console.log("trying to remove: " + rId);
+  if(confirm("Are you sure you want to delete: " + rId)){
+    console.log("deleted: " + rId)
+  }
+  else{
+    console.log("cancelled deletion of: " + rId);
+  }
 }
