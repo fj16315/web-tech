@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="index.css"/>
+    <link rel="stylesheet" href="searchResults.css"/>
+    <link rel="stylesheet" href="profilepage.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="js/loadUserDetails.js"></script>
     <script src="js/generatelogin.js"></script>
     <script src="js/onloadListener.js"></script>
+    <script src="js/loadUserRecipes.js"></script>
   </head>
   <body onload="changelogin();">
     <nav class="navbar navbar-inverse">
@@ -78,7 +81,7 @@
       <div class="col-sm-9">
         <ul class="nav nav-tabs" id="myTab">
           <li class="home"><a href="#home" data-toggle="tab">Home</a></li>
-          <li><a href="#yourRecipes" data-toggle="tab">Your Recipes</a></li>
+          <li><a href="#yourRecipes" data-toggle="tab" onclick="loadUserRecipes();">Your Recipes</a></li>
           <li><a href="#accountDetails" data-toggle="tab">Account Details</a></li>
         </ul>
 
@@ -87,7 +90,9 @@
             <p>Some stuff here?</p>
           </div>
           <div class="tab-pane" id="yourRecipes">
-            <p>take me there!</p>
+            <div class="row col-xs-12">
+              <div id="notloading"></div>
+            </div>
           </div>
           <div class="tab-pane" id="accountDetails">
             <form class="form" action="/logout" method="post" id="registrationForm">

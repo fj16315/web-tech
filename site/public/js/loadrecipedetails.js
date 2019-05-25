@@ -24,7 +24,7 @@ function loadRecipeDetails(str) {
         //update saving term
         $('#searchTerm').replaceWith('<h2 id="searchTerm">Result for <strong>' + str + '</strong></h2>');
 
-        $('#loading').replaceWith('<div id="notLoading" class="col-xs-12 col-sm-6 col-md-12"><div id="results"></div></div>');
+        $('#loading').replaceWith('<div id="notLoading" class="col-xs-12"><div id="results"></div></div>');
         //Get all the elements and put them in a search result
 
         //replace the results with no results!

@@ -404,6 +404,33 @@ app.post('/logout', function(req, res){
   res.redirect('/login');
 });
 
+app.post('/getUserResults', function(req, res, next){
+  console.log("User recipes requested");
+  //TODO!
+  console.log("TODO!");
+  let results = { titles: [] };
+  db.all('select Title from Recipe', function(err, rows) { //PLACEHOLDER <- returns all searches for salad
+  //psAllTitleRecipe.all(function(err, rows) {
+    for (let i = 0; i < rows.length; i++) {
+      let lev = ed.levenshtein(rows[i].Title, "Salad", insert, remove, update);
+      if(lev.distance <= 2){
+        results.titles.push(rows[i].Title);
+        //results.push({ title: rows[i], difficulty: difficulty[i] })
+      }
+    }
+    //for(each title)
+      //get the edit distance
+    if (err) {
+      console.log("Error, no recipe");
+      next(err);
+    } else {
+      console.log("Found recipe");
+      console.log(results);
+      res.send(results);
+    }
+  });
+});
+
 // Post request for searching for recipes
 app.post('/getSearchResults', function(req, res, next) {
   console.log("Recipes requested");
