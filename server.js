@@ -13,6 +13,7 @@ let SQLiteStore = require('connect-sqlite3')(session);
 let ed = require('edit-distance');
 let validUrl = require('valid-url');
 let parseJson = require('parse-json');
+let https = require('https');
 
 // Initialize global variables
 
@@ -69,10 +70,17 @@ let psRunInsertSteps = db.prepare('insert into Steps (Step, OrderNo, IdR) values
 
 // Start server on specified port
 
-let server = app.listen(8080, function() {
+/*let server = app.listen(8080, function() {
   let host = server.address().address;
   let port = server.address().port;
   console.log("%s:%s", host, port);
+});*/
+
+https.createServer({
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert')
+}, app).listen(8080, function() {
+  console.log("Listening!");
 });
 
 // Initialize sessions
