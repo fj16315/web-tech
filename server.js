@@ -140,9 +140,10 @@ function protected(req, res, next) {
   if (!req.isAuthenticated()) {
     res.redirect('/login');
     //return an error
+    //return next();
+  } else {
     return next();
   }
-  return next();
 }
 
 // Set passport authentication functions
@@ -205,7 +206,7 @@ passport.deserializeUser(function(IdU, done) {
 app.get('/', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    res.header("Content-Type", "application/xhtml+xml");
+    //res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/index.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -222,7 +223,7 @@ app.get('/', function(req, res, next) {
 app.get('/login', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    res.header("Content-Type", "application/xhtml+xml");
+    //res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/login.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -239,7 +240,7 @@ app.get('/login', function(req, res, next) {
 app.get('/about', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    res.header("Content-Type", "application/xhtml+xml");
+    //res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/about.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -256,7 +257,7 @@ app.get('/about', function(req, res, next) {
 app.get('/profile', protected, function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    res.header("Content-Type", "application/xhtml+xml");
+    //res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/profile.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -305,7 +306,7 @@ app.get('/recipe_template', function(req, res, next) {
                 console.log("rating: " + row.Rating);
                 console.log("steps: " + steps);
                 console.log("ingredients: " + ingredients);
-                res.header("Content-Type", "application/xhtml+xml");
+                //res.header("Content-Type", "application/xhtml+xml");
                 res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating, steps: steps, ingredients: ingredients});
               }
             });
@@ -322,7 +323,7 @@ app.get('/recipe_template', function(req, res, next) {
 app.get('/signup', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    res.header("Content-Type", "application/xhtml+xml");
+    //res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/signup.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -339,7 +340,7 @@ app.get('/signup', function(req, res, next) {
 app.get('/searchResults', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    res.header("Content-Type", "application/xhtml+xml");
+    //res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/searchResults.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
