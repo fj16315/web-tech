@@ -11,11 +11,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="index.css"/>
     <link rel="stylesheet" href="searchResults.css"/>
+    <link rel="stylesheet" href="recipe_add.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="js/loadrecipedetails.js"></script>
     <script src="js/generatelogin.js"></script>
     <script src="js/onloadListener.js"></script>
+    <script src="js/filterResults.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-inverse">
@@ -59,6 +61,14 @@
       </hgroup>
       <div id="searchResults" class="col-xs-12 col-sm-6 col-md-12">
         <div id="notLoading"></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-secondary" onclick="filterResults();">Filter!</button>
+        </div>
       </div>
     </div>
 

@@ -21,7 +21,7 @@ function loadUserRecipes(){
       console.log(a);
 
       //update saving term
-      $('#loading').replaceWith('<div id="notloading" class="col-xs-12"><div id="results"></div></div>');
+      $('#loading').replaceWith('<div id="notloading" class="col-xs-12"><ul id="results"></ul></div>');
       //Get all the elements and put them in a search result
 
       //replace the results with no results!
@@ -32,7 +32,7 @@ function loadUserRecipes(){
         //foreach(recipe in response );
         for(let i = 0; i<a.titles.length; i++){
         // $('#results').append('<h1> Wow! </h1>');
-        $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" /></a></div><div class="col-xs-6 col-xs-4"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><li><i class="glyphicon glyphicon-time"><span>a time?</span></i></li></ul></div><div class="col-xs-6 col-sm-4"><button class="btn btn-danger" onclick="removeRecipe(' + " 'input!'"  + ');">Remove!</button></div><span class="clearfix borda"></span></article>');
+        $('#results').append('<li><article class="search-result row"><div class="col-xs-12 col-sm-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" /></a></div><div class="col-xs-6 col-xs-4"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><li><i class="glyphicon glyphicon-time"><span>a time?</span></i></li></ul></div><div class="col-xs-6 col-sm-4"><button class="btn btn-danger" onclick="removeRecipe(' + " 'input!'"  + ');">Remove!</button></div><span class="clearfix borda"></span></article></li>');
         }
       }
     }
