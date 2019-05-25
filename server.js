@@ -451,7 +451,7 @@ app.post('/getRecipe', function(req, res, next) {
 });
 
 // Post request for adding a new recipe
-/*app.post('/AddRecipe', function(req, res, next) {
+app.post('/AddRecipe', function(req, res, next) {
   //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
   psRunInsertRecipe.run(req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
     if (err) {
