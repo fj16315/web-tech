@@ -54,7 +54,7 @@ lang="en-GB" xml:lang="en-GB">
   <div class="container">
     <div class="row">
       <div class="col-md-8">
-        <form action="/AddRecipe" onsubmit="event.preventDefault(); validateMyForm();">
+        <form id="recipeData" action="/AddRecipe" onsubmit="event.preventDefault(); submitData();">
           <h1>Adding a new recipe</h1>
           <div class="form-group">
             <label for="title">Recipe Name</label>
@@ -89,12 +89,12 @@ lang="en-GB" xml:lang="en-GB">
               <li>
                 <div class="row">
                   <div class="col-xs-8">
-                    <label for="ingredients1">Ingredient</label>
-                    <input type="text" class="form-control" id="ingredients1" name="ingredients1"/>
+                    <label for="ingredient1">Ingredient</label>
+                    <input type="text" class="form-control" id="ingredient0" name="ingredient0"/>
                   </div>
                   <div class="col-xs-4">
                     <label for="quantity1">Quantity</label>
-                    <input type="text"  class="form-control" id="quantity1" name="quantity1"/>
+                    <input type="text"  class="form-control" id="quantity0" name="quantity0"/>
                   </div>
                 </div>
               </li>

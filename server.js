@@ -206,7 +206,7 @@ passport.deserializeUser(function(IdU, done) {
 app.get('/', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    //res.header("Content-Type", "application/xhtml+xml");
+    // res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/index.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
