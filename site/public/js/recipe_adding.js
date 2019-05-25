@@ -22,15 +22,11 @@ function submitData(){
   console.log(method);
 
   //Get data, put it in a JSON object
-  let c = {
-    title: title,
-    difficulty: difficulty,
-    cookTime: cookTime,
-    prepTime: prepTime,
-    ingredients: ingredients,
-    method: method
-  };
-  console.log(c);
+  let recipe = JSON.stringify({Title: title,Rating: difficulty,cookTime: cookTime,prepTime: prepTime,Serves: 1,ingredients: ingredients,Steps: method});
+  console.log(recipe);
+  recipe = encodeURI(recipe);
+  console.log(recipe);
+  addRecipe(recipe);
 }
 
 function addIngredient(){
