@@ -11,6 +11,7 @@ let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let SQLiteStore = require('connect-sqlite3')(session);
 let ed = require('edit-distance');
+let validUrl = require('valid-url');
 
 // Initialize global variables
 
@@ -27,7 +28,10 @@ let sessionOpts = {
   store: new SQLiteStore,
   secret: 'sneaky',
   cookie: { httpOnly: true, maxAge: (4*60*60*1000)}
-}
+};
+let sendFileOptions = {
+  root: __dirname + '/site'
+};
 
 // Start server on specified port
 
@@ -160,126 +164,144 @@ passport.deserializeUser(function(IdU, done) {
 
 // Get request for home page
 app.get('/', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-  res.header("Content-Type", "application/xhtml+xml");
-  res.sendFile('/index.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  if (validUrl.isUri(fullUrl)) {
+    res.header("Content-Type", "application/xhtml+xml");
+    res.sendFile('/index.html', sendFileOptions, function(err) {
+      if (err) {
+        next(err);
+      } else {
+        console.log("Sent file");
+      }
+    });
+  } else {
+    next(new Error('This is an invalid url'));
+  }
 });
 
 // Get request for login page
 app.get('/login', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-  res.header("Content-Type", "application/xhtml+xml");
-  res.sendFile('/login.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  if (validUrl.isUri(fullUrl)) {
+    res.header("Content-Type", "application/xhtml+xml");
+    res.sendFile('/login.html', sendFileOptions, function(err) {
+      if (err) {
+        next(err);
+      } else {
+        console.log("Sent file");
+      }
+    });
+  } else {
+    next(new Error('This is an invalid url'));
+  }
 });
 
 // Get request for about page
 app.get('/about', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-
-  res.sendFile('/about.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  if (validUrl.isUri(fullUrl)) {
+    res.header("Content-Type", "application/xhtml+xml");
+    res.sendFile('/about.html', sendFileOptions, function(err) {
+      if (err) {
+        next(err);
+      } else {
+        console.log("Sent file");
+      }
+    });
+  } else {
+    next(new Error('This is an invalid url'));
+  }
 });
 
 // Get request for profile page
 app.get('/profile', protected, function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-  res.header("Content-Type", "application/xhtml+xml");
-  res.sendFile('/profile.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  if (validUrl.isUri(fullUrl)) {
+    res.header("Content-Type", "application/xhtml+xml");
+    res.sendFile('/profile.html', sendFileOptions, function(err) {
+      if (err) {
+        next(err);
+      } else {
+        console.log("Sent file");
+      }
+    });
+  } else {
+    next(new Error('This is an invalid url'));
+  }
 });
 
 // Get request for recipe page
 app.get('/recipe_template', function(req, res, next) {
-  db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
-    if (err) {
-      console.log("Error, no recipe");
-      next(err);
-    } else {
-      console.log("Found recipe");
-      console.log(row);
-      db.all('select Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
-        if (err) {
-          next(err);
-        } else {
-          let steps = [];
-          for (let i = 0; i < rows.length; i++) {
-            steps[i] = rows[i].Step;
-          }
-          db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
-            if (err) {
-              next(err);
-            } else {
-              let ingredients = [];
-              for (let i = 0; i < rows.length; i++) {
-                ingredients[i] = rows[i].Quantity + "x " + rows[i].Ingredient;
-              }
-              res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating, steps: steps, ingredients: ingredients});
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  if (validUrl.isUri(fullUrl)) {
+    db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
+      if (err) {
+        console.log("Error, no recipe");
+        next(err);
+      } else {
+        console.log("Found recipe");
+        console.log(row);
+        db.all('select Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
+          if (err) {
+            next(err);
+          } else {
+            let steps = [];
+            for (let i = 0; i < rows.length; i++) {
+              steps[i] = rows[i].Step;
             }
-          });
-        }
-      });
-    }
-  });
+            db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
+              if (err) {
+                next(err);
+              } else {
+                let ingredients = [];
+                for (let i = 0; i < rows.length; i++) {
+                  ingredients[i] = rows[i].Quantity + "x " + rows[i].Ingredient;
+                }
+                res.header("Content-Type", "application/xhtml+xml");
+                res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating, steps: steps, ingredients: ingredients});
+              }
+            });
+          }
+        });
+      }
+    });
+  } else {
+    next(new Error('This is an invalid url'));
+  }
 });
 
 // Get request for signup page
 app.get('/signup', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-
-  res.sendFile('/signup.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  if (validUrl.isUri(fullUrl)) {
+    res.header("Content-Type", "application/xhtml+xml");
+    res.sendFile('/signup.html', sendFileOptions, function(err) {
+      if (err) {
+        next(err);
+      } else {
+        console.log("Sent file");
+      }
+    });
+  } else {
+    next(new Error('This is an invalid url'));
+  }
 });
 
 // Get request for search page
 app.get('/searchResults', function(req, res, next) {
-  let options = {
-    root: __dirname + '/site'
-  };
-
-  res.sendFile('/searchResults.html', options, function(err) {
-    if (err) {
-      next(err);
-    } else {
-      console.log("Sent file");
-    }
-  });
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  if (validUrl.isUri(fullUrl)) {
+    res.header("Content-Type", "application/xhtml+xml");
+    res.sendFile('/searchResults.html', sendFileOptions, function(err) {
+      if (err) {
+        next(err);
+      } else {
+        console.log("Sent file");
+      }
+    });
+  } else {
+    next(new Error('This is an invalid url'));
+  }
 });
 
 // Get requests for updating pages
