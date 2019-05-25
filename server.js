@@ -63,7 +63,7 @@ let psRunInsertIgnoreIngredient = db.prepare('insert or ignore into Ingredients 
 //db.get('select top IdI from Ingredients order by IdI desc');
 //let psGetTopIngredient = db.prepare('select top IdI from Ingredients order by IdI desc');
 //db.run('if not exists (select 1 from Recipe_Ingredient where IdI = ? and IdR = ?) begin insert into Recipe_Ingredient (IdR, IdI) values (?, ?)', IdI, IdR, IdR, IdI, function(err) {
-let psRunInsertIgnoreRecipe_Ingredient = db.prepare('insert or ignore into Recipe_Ingredient (IdI, IdR) values (?, ?)');
+let psRunInsertIgnoreRecipe_Ingredient = db.prepare('insert or ignore into Recipe_Ingredient (IdI, IdR, Quantity) values (?, ?, ?)');
 //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
 let psRunInsertSteps = db.prepare('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)');
 
@@ -271,10 +271,10 @@ app.get('/profile', protected, function(req, res, next) {
   }
 });
 
+// Get request for add recipe page
 app.get('/add_recipe', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/recipe_creation.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -472,43 +472,47 @@ app.post('/getRecipe', function(req, res, next) {
 app.post('/AddRecipe', function(req, res, next) {
   //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
   console.log("--- adding recipe! ---");
-  console.log(req.body);
-  console.log(req.body.Title);
-  console.log("--- Tried adding ---");
-  let thing = db.each('select IdR from Recipe order by IdR desc limit 1');
-  console.log("Latest IdR: " + thing);
-  /*psRunInsertRecipe.run(req.body.Title, req.body.Serves, req.body.Rating, req.user.IdU, function(err) {
-    if (err) {
-      next(err);
+  psRunInsertRecipe.run(req.body.Title, req.body.Serves, req.body.Rating, req.user.IdU, function(err1) {
+    if (err1) {
+      next(err1);
     } else {
-      let IdR = db.get('select IdR from Recipe order by IdR desc limit 1');
-      for (let i = 0; i < req.body.Steps.length; i++) {
-        //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
-        psRunInsertSteps.run(req.body.Steps[i], i+1, IdR, function(err) {
-          if (err) {
-            next(err);
-          } else {
-            for (let j = 0; j < req.body.Ingredients.length; j++) {
-              //db.run('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end', req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
-              psRunInsertIgnoreIngredient.run(req.body.Ingredients[j].Ingredient, function(err) {
-                if (err) {
-                  next(err);
-                } else {
-                  let IdI = db.get('select IdI from Ingredients order by IdI desc limit 1');
-                  //db.run('if not exists (select 1 from Recipe_Ingredient where IdI = ? and IdR = ?) begin insert into Recipe_Ingredient (IdR, IdI) values (?, ?)', IdI, IdR, IdR, IdI, function(err) {
-                  psRunInsertIgnoreRecipe_Ingredient.run(IdI, IdR, function(err) {
-                    if (err) {
-                      next (err);
-                    } else {
-                      res.redirect('/profile');
-                    }
-                  });
-                }
-              });
-            }
+      db.get('select IdR from Recipe order by IdR desc limit 1', function(err2, row) {
+        if (err2) {
+          next(err2);
+        } else {
+          for (let i = 0; i < req.body.Steps.length; i++) {
+            //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
+            psRunInsertSteps.run(req.body.Steps[i], i+1, row.IdR, function(err3) {
+              if (err3) {
+                next(err3);
+              }
+            });
           }
-        });
-      }
+          for (let j = 0; j < req.body.Ingredients.length; j++) {
+            //db.run('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end', req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
+            psRunInsertIgnoreIngredient.run(req.body.Ingredients[j].ingredient, function(err4) {
+              if (err4) {
+                next(err4);
+              } else {
+                db.get('select IdI from Ingredients order by IdI desc limit 1', function(err5, rowI) {
+                  if (err5) {
+                    next(err5);
+                  } else {
+                    //db.run('if not exists (select 1 from Recipe_Ingredient where IdI = ? and IdR = ?) begin insert into Recipe_Ingredient (IdR, IdI) values (?, ?)', IdI, IdR, IdR, IdI, function(err) {
+                    psRunInsertIgnoreRecipe_Ingredient.run(rowI.IdI, row.IdR, req.body.Ingredients[j].quantity, function(err6) {
+                      if (err6) {
+                        next(err6);
+                      } else {
+                        res.redirect('/profile');
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        }
+      });
     }
-  });*/
+  });
 });
