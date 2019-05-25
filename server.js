@@ -56,13 +56,13 @@ let psAllOrderNoStepFromSteps = db.prepare('select OrderNo, Step from Steps wher
 //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
 let psRunInsertRecipe = db.prepare('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)');
 //db.run('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end', req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
-//let psRunIfExistsInsertIngredient = db.prepare('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end');
+let psRunInsertIgnoreIngredient = db.prepare('insert or ignore into Ingredients (Ingredient) values (?)');
 //db.get('select top IdR from Recipe order by IdR desc');
 //let psGetTopRecipe = db.prepare('select top IdR from Recipe order by IdR desc');
 //db.get('select top IdI from Ingredients order by IdI desc');
 //let psGetTopIngredient = db.prepare('select top IdI from Ingredients order by IdI desc');
 //db.run('if not exists (select 1 from Recipe_Ingredient where IdI = ? and IdR = ?) begin insert into Recipe_Ingredient (IdR, IdI) values (?, ?)', IdI, IdR, IdR, IdI, function(err) {
-//let psRunIfExistsInsertRecipe_Ingredient = db.prepare('if not exists (select 1 from Recipe_Ingredient where IdI = ? and IdR = ?) begin insert into Recipe_Ingredient (IdR, IdI) values (?, ?)');
+let psRunInsertIgnoreRecipe_Ingredient = db.prepare('insert or ignore into Recipe_Ingredient (IdI, IdR) values (?, ?)');
 //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
 let psRunInsertSteps = db.prepare('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)');
 
@@ -474,8 +474,7 @@ app.post('/AddRecipe', function(req, res, next) {
     if (err) {
       next(err);
     } else {
-      let IdR = db.get('select top IdR from Recipe order by IdR desc');
-      //let IdR = 1;
+      let IdR = db.get('select IdR from Recipe order by IdR desc limit 1')
       for (let i = 0; i < req.query.Steps.length; i++) {
         //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
         psRunInsertSteps.run(req.query.Steps[i], i+1, IdR, function(err) {
@@ -484,14 +483,13 @@ app.post('/AddRecipe', function(req, res, next) {
           } else {
             for (let j = 0; j < req.query.Ingredients.length; j++) {
               //db.run('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end', req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
-              psRunIfExistsInsertIngredient.run(req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
+              psRunInsertIgnoreIngredient.run(req.query.Ingredients[j].Ingredient, function(err) {
                 if (err) {
                   next(err);
                 } else {
-                  let IdI = db.get('select top IdI from Ingredients order by IdI desc');
-                  //let IdI = 1;
+                  let IdI = db.get('select IdI from Ingredients order by IdI desc limit 1');
                   //db.run('if not exists (select 1 from Recipe_Ingredient where IdI = ? and IdR = ?) begin insert into Recipe_Ingredient (IdR, IdI) values (?, ?)', IdI, IdR, IdR, IdI, function(err) {
-                  psRunIfExistsInsertRecipe_Ingredient.run(IdI, IdR, IdR, IdI, function(err) {
+                  psRunInsertIgnoreRecipe_Ingredient.run(IdI, IdR, function(err) {
                     if (err) {
                       next (err);
                     } else {
