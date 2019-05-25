@@ -1,3 +1,4 @@
+"use strict"
 function changelogin(){
   //Check if it's logged in
   if (window.XMLHttpRequest) {

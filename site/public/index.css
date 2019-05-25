@@ -44,19 +44,6 @@
   background: #ccc;
 }
 
-.carousel-caption{
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.btn{
-  font-size: 18px;
-  color: #000;
-  padding: 12px 12px;
-  background-color: #F2E3BC;
-  border: 2px solid #FFF;
-}
-
 .container{
   margin: 4% auto;
 }
@@ -64,10 +51,6 @@
 #icon{
   max-width: 300px;
   margin: 1% auto;
-}
-
-@keyframes play {
-   100% { background-position: -2000px; }
 }
 
 footer{
