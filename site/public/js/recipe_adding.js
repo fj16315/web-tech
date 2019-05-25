@@ -2,30 +2,49 @@
 
 function submitData(){
   console.log("submitting");
-
-  let title = $('#title').val();
-  let difficulty = $('#difficulty').val();
-  let cookTime = $('#cookTime').val();
-  let prepTime = $('#prepTime').val();
-  let serves = $('#serves').val();
-
-  let ingredients = [];
-  for(let i = 0; i < document.getElementById("ingredients").getElementsByTagName("li").length; i++){
-    ingredients.push({ ingredient: $('#ingredient' + i).val(), quantity: $('#quantity' + i).val()});
+  if(isFormEmpty()){
+    alert("Please fill in all fields");
   }
+  else{
+    let title = $('#title').val();
+    let difficulty = $('#difficulty').val();
+    let cookTime = $('#cookTime').val();
+    let prepTime = $('#prepTime').val();
+    let serves = $('#serves').val();
 
-  let method = [];
-  for(let i = 0; i< document.getElementById("methods").getElementsByTagName("li").length; i++){
-    method.push($('#method' + i).val());
+    let ingredients = [];
+    for(let i = 0; i < document.getElementById("ingredients").getElementsByTagName("li").length; i++){
+      ingredients.push({ ingredient: $('#ingredient' + i).val(), quantity: $('#quantity' + i).val()});
+    }
+
+    let method = [];
+    for(let i = 0; i< document.getElementById("methods").getElementsByTagName("li").length; i++){
+      method.push($('#method' + i).val());
+    }
+
+    console.log(ingredients);
+    console.log(method);
+
+    //Get data, put it in a JSON object
+    let recipe = JSON.stringify({Title:title,Rating:difficulty,CookTime:cookTime,PrepTime:prepTime,Serves:serves,Ingredients:ingredients,Steps:method});
+
+    addRecipe(recipe);
   }
+}
 
-  console.log(ingredients);
-  console.log(method);
-
-  //Get data, put it in a JSON object
-  let recipe = JSON.stringify({Title:title,Rating:difficulty,CookTime:cookTime,PrepTime:prepTime,Serves:serves,Ingredients:ingredients,Steps:method});
-
-  addRecipe(recipe);
+function isFormEmpty(){
+  let isValid = false;
+  $('#recipeData :input').each(function() {
+    console.log($(this).val());
+    console.log(this.type);
+    if(this.type !== "submit"){
+      if($(this).val() === ""){
+        console.log("Empty!");
+        isValid = true;
+      }
+    }
+  });
+  return isValid;
 }
 
 function addIngredient(){
