@@ -14,8 +14,9 @@ lang="en-GB" xml:lang="en-GB">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="js/generatelogin.js"></script>
   <script src="js/recipe_adding.js"></script>
+  <script src="js/onloadListener.js"></script>
 </head>
-<body onload="changelogin();">
+<body>
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -53,7 +54,7 @@ lang="en-GB" xml:lang="en-GB">
   <div class="container">
     <div class="row">
       <div class="col-md-8">
-        <form action="/AddRecipe" method="post" class="form-container">
+        <form action="/AddRecipe" onsubmit="event.preventDefault(); validateMyForm();">
           <h1>Adding a new recipe</h1>
           <div class="form-group">
             <label for="title">Recipe Name</label>
