@@ -55,7 +55,7 @@ let psAllTitleRecipe = db.prepare('select Title from Recipe');
 //db.all('select OrderNo, Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
 let psAllOrderNoStepFromSteps = db.prepare('select OrderNo, Step from Steps where IdR = ?');
 //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
-let psRunInsertRecipe = db.prepare('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)');
+let psRunInsertRecipe = db.prepare('insert into Recipe (Title, Serves, Rating, IdU, Prep_Time, Cooking_Time) values (?, ?, ?, ?, ?, ?)');
 //db.run('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end', req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
 let psRunInsertIgnoreIngredient = db.prepare('insert or ignore into Ingredients (Ingredient) values (?)');
 //db.get('select top IdR from Recipe order by IdR desc');
@@ -472,7 +472,7 @@ app.post('/getRecipe', function(req, res, next) {
 app.post('/AddRecipe', function(req, res, next) {
   //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
   console.log("--- adding recipe! ---");
-  psRunInsertRecipe.run(req.body.Title, req.body.Serves, req.body.Rating, req.user.IdU, function(err1) {
+  psRunInsertRecipe.run(req.body.Title, req.body.Serves, req.body.Rating, req.user.IdU, req.body.PrepTime, req.body.CookTime, function(err1) {
     if (err1) {
       next(err1);
     } else {
