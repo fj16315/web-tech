@@ -1,1 +1,1 @@
-insert or ignore into Recipe_Ingredient (IdI, IdR) values (1, 2);
+select IdR from Recipe order by IdR desc limit 1;
