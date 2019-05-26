@@ -416,13 +416,13 @@ app.post('/getUserResults', function(req, res, next){
   console.log("User recipes requested");
   //TODO!
   console.log("TODO!");
-  let results = { titles: [] };
+  let results = [];
   db.all('select Title from Recipe', function(err, rows) { //PLACEHOLDER <- returns all searches for salad
   //psAllTitleRecipe.all(function(err, rows) {
     for (let i = 0; i < rows.length; i++) {
       let lev = ed.levenshtein(rows[i].Title, "Salad", insert, remove, update);
       if(lev.distance <= 2){
-        results.titles.push(rows[i].Title);
+        results.push({Title:rows[i].Title,CookTime:row[i].CookTime,PrepTime:row[i].PrepTime,IdR:row[i].IdR});
         //results.push({ title: rows[i], difficulty: difficulty[i] })
       }
     }
@@ -446,14 +446,14 @@ app.post('/getSearchResults', function(req, res, next) {
   //Some sql query to get results
   // let results = [];
   // let results = { titles: [], difficulty: [] };
-  let results = { titles: [] };
+  let results = [];
 
   db.all('select Title from Recipe', function(err, rows) {
   //psAllTitleRecipe.all(function(err, rows) {
     for (let i = 0; i < rows.length; i++) {
       let lev = ed.levenshtein(rows[i].Title, req.query.search, insert, remove, update);
       if(lev.distance <= 2){
-        results.titles.push(rows[i].Title);
+        results.push({title:rows[i].Title, cookTime:"10", prepTime:"20", IdR:"1"});
         //results.push({ title: rows[i], difficulty: difficulty[i] })
       }
     }
@@ -465,6 +465,7 @@ app.post('/getSearchResults', function(req, res, next) {
     } else {
       console.log("Found recipe");
       console.log(results);
+      //results = JSON.stringify(results);
       res.send(results);
     }
   });

@@ -20,6 +20,7 @@ function loadRecipeDetails(str) {
         //Get json object from this this.response.jsonobject
         let a = JSON.parse(this.responseText);
         console.log(a);
+        console.log(a.length);
 
         //update saving term
         $('#searchTerm').replaceWith('<h2 id="searchTerm">Result for <strong>' + str + '</strong></h2>');
@@ -28,15 +29,15 @@ function loadRecipeDetails(str) {
         //Get all the elements and put them in a search result
 
         //replace the results with no results!
-        if(a.titles.length == 0){
+        if(a.length == 0){
           $('#results').append('<p>No results!</p>');
         }
         else{
           //foreach(recipe in response );
-          for(let i = 0; i<a.titles.length; i++){
+          for(let i = 0; i < a.length; i++){
           // $('#results').append('<h1> Wow! </h1>');
           // $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4">'+ a.titles[i] + '</div></article>');
-          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" /></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><i class="glyphicon glyphicon-time"><span><a id="cookTime">10</a></span></i></ul></div><span class="clearfix borda"></span></article>');
+          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a[i].title + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a[i].title + '" /></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=' + a[i].IdR + '">' + a[i].title + '</a></h3><i class="glyphicon glyphicon-time"><span><a id="cookTime">' + a[i].cookTime  + '</a></span></i><i class="glyphicon glyphicon-time"><span><a id="cookTime">' + a[i].prepTime  + '</a></span></i></ul></div><span class="clearfix borda"></span></article>');
           }
         }
       }
