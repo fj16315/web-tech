@@ -452,12 +452,12 @@ app.post('/getSearchResults', function(req, res, next) {
   // let results = { titles: [], difficulty: [] };
   let results = [];
 
-  db.all('select Title from Recipe', function(err, rows) {
+  db.all('select Title, Cooking_Time, Prep_Time, IdR from Recipe', function(err, rows) {
   //psAllTitleRecipe.all(function(err, rows) {
     for (let i = 0; i < rows.length; i++) {
       let lev = ed.levenshtein(rows[i].Title, req.query.search, insert, remove, update);
       if(lev.distance <= 2){
-        results.push({title:rows[i].Title, cookTime:"10", prepTime:"20", IdR:"1"});
+        results.push({title:rows[i].Title, cookTime:rows[i].Cooking_Time, prepTime:rows[i].Prep_Time, IdR:rows[i].IdR});
         //results.push({ title: rows[i], difficulty: difficulty[i] })
       }
     }
