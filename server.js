@@ -68,9 +68,12 @@ let psRunInsertIgnoreIngredient = db.prepare('insert or ignore into Ingredients 
 let psRunInsertIgnoreRecipe_Ingredient = db.prepare('insert or ignore into Recipe_Ingredient (IdI, IdR, Quantity) values (?, ?, ?)');
 //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
 let psRunInsertSteps = db.prepare('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)');
-let psRunDeleteRecipe = db.prepare('delete from Recipe where IdR = ?');
+let psRunDeleteRecipe_IdR = db.prepare('delete from Recipe where IdR = ?');
 let psRunDeleteSteps = db.prepare('delete from Steps where IdR = ?');
 let psRunDeleteRecipe_Ingredient = db.prepare('delete from Recipe_Ingredient where IdR = ?');
+let psRunDeleteUser = db.prepare('delete from users where IdU = ?');
+let psRunDeleteRecipe_IdU = db.prepare('delete from Recipe where IdU = ?');
+let psRunUpdateUsersRecipe_Count = db.prepare('update users set Recipe_Count = Recipe_Count + 1 where IdU = ?');
 
 // Start server on specified port
 
@@ -551,7 +554,13 @@ app.post('/AddRecipe', function(req, res, next) {
               }
             });
           }
-          res.redirect('/profile');
+          psRunUpdateUsersRecipe_Count.run(req.user.IdU, function(err7) {
+            if (err7) {
+              next(err7);
+            } else {
+              res.redirect('/profile');
+            }
+          });
         }
       });
     }
@@ -570,7 +579,7 @@ app.post('/deleteRecipe', function(req, res, next) {
         if (err1) {
           next(err1);
         } else {
-          psRunDeleteRecipe.run(req.body.IdR, function(err2) {
+          psRunDeleteRecipe_IdR.run(req.body.IdR, function(err2) {
             if (err2) {
               next(err2);
             } else {
@@ -583,6 +592,7 @@ app.post('/deleteRecipe', function(req, res, next) {
   });
 });
 
+// Post request for deleting a user
 app.post('/deleteUser', function(req, res, next) {
   db.all('select IdR from Recipe where IdU = ?', req.user.IdU, function(err, rows) {
     if (err) {
@@ -590,11 +600,11 @@ app.post('/deleteUser', function(req, res, next) {
     } else {
       console.log("rows.length: " + rows.length);
       for (let i = 0; i < rows.length; i++) {
-        db.run('delete from Steps where IdR = ?', rows[i].IdR, function(err1) {
+        psRunDeleteSteps.run(rows[i].IdR, function(err1) {
           if (err1) {
             next(err1);
           } else {
-            db.run('delete from Recipe_Ingredient where IdR = ?', rows[i].IdR, function(err2) {
+            psRunDeleteRecipe_Ingredient.run(rows[i].IdR, function(err2) {
               if (err2) {
                 next(err2);
               }
@@ -602,11 +612,11 @@ app.post('/deleteUser', function(req, res, next) {
           }
         });
       }
-      db.run('delete from Recipe where IdU = ?', req.user.IdU, function(err3) {
+      psRunDeleteRecipe_IdU.run(req.user.IdU, function(err3) {
         if (err3) {
           next(err3);
         } else {
-          db.run('delete from users where IdU = ?', req.user.IdU, function(err4) {
+          psRunDeleteUser.run(req.user.IdU, function(err4) {
             if (err4) {
               next(err4);
             } else {
