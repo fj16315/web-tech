@@ -47,11 +47,11 @@ let psGetIdUUsernameFromUsers_Username = db.prepare('select IdU, username from u
 //db.get('select IdU, username from users where IdU = ?', IdU, function(err, row) {
 let psGetIdUUsernameFromUsers_IdU = db.prepare('select IdU, username from users where IdU = ?');
 //db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
-let psGetTitleServesRatingFromRecipe = db.prepare('select Title, Serves, Rating from Recipe where IdR = ?');
+let psGetTitleServesRatingCooking_TimePrep_TimeFromRecipe = db.prepare('select Title, Serves, Rating, Cooking_Time, Prep_Time from Recipe where IdR = ?');
 //db.all('select Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
 let psAllStepFromSteps = db.prepare('select Step from Steps where IdR = ?');
 //db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
-let psAllQuantityIngredientFromIngredientsRecipe_Ingredient = db.prepare('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI');
+let psAllQuantityIngredientTypeFromIngredientsRecipe_Ingredient = db.prepare('select Quantity, Ingredient, Type from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI');
 //db.all('select Title from Recipe', function(err, rows) {
 let psAllTitleCooking_TimePrep_TimeIdRFromRecipe = db.prepare('select Title, Cooking_Time, Prep_Time, IdR from Recipe where IdU = ?');
 //db.all('select OrderNo, Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
@@ -59,7 +59,7 @@ let psAllOrderNoStepFromSteps = db.prepare('select OrderNo, Step from Steps wher
 //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
 let psRunInsertRecipe = db.prepare('insert into Recipe (Title, Serves, Rating, IdU, Prep_Time, Cooking_Time) values (?, ?, ?, ?, ?, ?)');
 //db.run('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end', req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
-let psRunInsertIgnoreIngredient = db.prepare('insert or ignore into Ingredients (Ingredient) values (?)');
+let psRunInsertIgnoreIngredient = db.prepare('insert or ignore into Ingredients (Ingredient, Type) values (?, ?)');
 //db.get('select top IdR from Recipe order by IdR desc');
 //let psGetTopRecipe = db.prepare('select top IdR from Recipe order by IdR desc');
 //db.get('select top IdI from Ingredients order by IdI desc');
@@ -307,39 +307,39 @@ app.get('/recipe_template', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
     //db.get('select Title, Serves, Rating from Recipe where IdR = ?', req.query.IdR, function(err, row) {
-    psGetTitleServesRatingFromRecipe.get(req.query.IdR, function(err, row) {
-      if (err) {
+    psGetTitleServesRatingCooking_TimePrep_TimeFromRecipe.get(req.query.IdR, function(err1, row1) {
+      if (err1) {
         console.log("Error, no recipe");
-        next(err);
+        next(err1);
       } else {
         console.log("Found recipe");
-        console.log(row);
+        console.log(row1);
         //db.all('select Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
-        psAllStepFromSteps.all(req.query.IdR, function(err, rows) {
-          if (err) {
-            next(err);
+        psAllStepFromSteps.all(req.query.IdR, function(err2, rows2) {
+          if (err2) {
+            next(err2);
           } else {
             let steps = [];
-            for (let i = 0; i < rows.length; i++) {
-              steps[i] = rows[i].Step;
+            for (let i = 0; i < rows2.length; i++) {
+              steps[i] = rows2[i].Step;
             }
             //db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
-            psAllQuantityIngredientFromIngredientsRecipe_Ingredient.all(req.query.IdR, function(err, rows) {
-              if (err) {
-                next(err);
+            psAllQuantityIngredientTypeFromIngredientsRecipe_Ingredient.all(req.query.IdR, function(err3, rows3) {
+              if (err3) {
+                next(err3);
               } else {
                 let ingredients = [];
-                for (let i = 0; i < rows.length; i++) {
-                  ingredients[i] = rows[i].Quantity + "x " + rows[i].Ingredient;
+                for (let i = 0; i < rows3.length; i++) {
+                  ingredients[i] = rows3[i].Quantity + rows3[i].Type + " " + rows3[i].Ingredient;
                 }
                 console.log("Rendering template");
-                console.log("title: " + row.Title);
-                console.log("serves: " + row.Serves);
-                console.log("rating: " + row.Rating);
+                console.log("title: " + row1.Title);
+                console.log("serves: " + row1.Serves);
+                console.log("rating: " + row1.Rating);
                 console.log("steps: " + steps);
                 console.log("ingredients: " + ingredients);
                 //res.header("Content-Type", "application/xhtml+xml");
-                res.render('recipe_template', { title: row.Title, serves: row.Serves, rating: row.Rating, steps: steps, ingredients: ingredients});
+                res.render('recipe_template', { title: row1.Title, serves: row1.Serves, rating: row1.Rating, cooking_time: row1.Cooking_Time, prep_time: row1.Prep_Time, steps: steps, ingredients: ingredients});
               }
             });
           }
@@ -530,7 +530,7 @@ app.post('/AddRecipe', function(req, res, next) {
           }
           for (let j = 0; j < req.body.Ingredients.length; j++) {
             //db.run('if not exists (select 1 from Ingredients where Ingredient = ?) begin insert into Ingredients (Ingredient) values (?) end', req.query.Ingredients[j].Ingredient, req.query.Ingredients[j].Ingredient, function(err) {
-            psRunInsertIgnoreIngredient.run(req.body.Ingredients[j].ingredient, function(err4) {
+            psRunInsertIgnoreIngredient.run(req.body.Ingredients[j].ingredient, req.body.Ingredients[j].type, function(err4) {
               if (err4) {
                 next(err4);
               } else {
@@ -539,6 +539,7 @@ app.post('/AddRecipe', function(req, res, next) {
                     next(err5);
                   } else {
                     //db.run('if not exists (select 1 from Recipe_Ingredient where IdI = ? and IdR = ?) begin insert into Recipe_Ingredient (IdR, IdI) values (?, ?)', IdI, IdR, IdR, IdI, function(err) {
+                    console.log("Quantity: " + req.body.Ingredients[j].quantity);
                     psRunInsertIgnoreRecipe_Ingredient.run(rowI.IdI, row.IdR, req.body.Ingredients[j].quantity, function(err6) {
                       if (err6) {
                         next(err6);

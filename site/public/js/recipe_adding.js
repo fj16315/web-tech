@@ -14,7 +14,7 @@ function submitData(){
 
     let ingredients = [];
     for(let i = 0; i < document.getElementById("ingredients").getElementsByTagName("li").length; i++){
-      ingredients.push({ ingredient: $('#ingredient' + i).val(), quantity: $('#quantity' + i).val(), quantity: $('#type' + i).val()});
+      ingredients.push({ ingredient: $('#ingredient' + i).val(), quantity: $('#quantity' + i).val(), type: $('#type' + i).val()});
     }
 
     let method = [];
@@ -54,7 +54,7 @@ function addIngredient(){
     let ingredQuan = "quantity" + length;
     let ingredType = "type" + length;
     console.log(length + ", " + ingredName + ", " + ingredQuan);
-    $('#ingredients').append('<li><div class="row"><div class="col-xs-6"><input type="text" class="form-control" id="' + ingredName + '" name="' + ingredName + '"/></div><div class="col-xs-3"><input type="text"  class="form-control" id="' + ingredQuan + '" name="' + ingredQuan + '"/></div><div class="col-xs-3"><select class="form-control" id="' + ingredType + '" name=" ' + ingredType + '"><option value="tsp">Teaspoon(s)</option><option value="tbsp">Tablespoon(s)</option><option value="ml">ml</option><option value="grams">grams</option><option value="items">items</option></select></div></div></li>');
+    $('#ingredients').append('<li><div class="row"><div class="col-xs-6"><input type="text" class="form-control" id="' + ingredName + '" name="' + ingredName + '"/></div><div class="col-xs-3"><input type="text"  class="form-control" id="' + ingredQuan + '" name="' + ingredQuan + '"/></div><div class="col-xs-3"><select class="form-control" id="' + ingredType + '" name=" ' + ingredType + '"><option value="tsp">Teaspoon(s)</option><option value="tbsp">Tablespoon(s)</option><option value="ml">ml</option><option value="grams">grams</option><option value="x">items</option></select></div></div></li>');
   }
   else{
     alert("Too many ingredients!");
