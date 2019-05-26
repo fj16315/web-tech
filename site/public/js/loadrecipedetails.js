@@ -36,7 +36,7 @@ function loadRecipeDetails(str) {
           for(let i = 0; i<a.titles.length; i++){
           // $('#results').append('<h1> Wow! </h1>');
           // $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4">'+ a.titles[i] + '</div></article>');
-          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" /></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><i class="glyphicon glyphicon-time"><span><a id="cookTime">20</a></span></i></ul></div><span class="clearfix borda"></span></article>');
+          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="' + '/recipe_template?rID=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" /></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><i class="glyphicon glyphicon-time"><span><a id="cookTime">10</a></span></i></ul></div><span class="clearfix borda"></span></article>');
           }
         }
       }

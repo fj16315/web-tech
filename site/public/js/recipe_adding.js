@@ -14,7 +14,7 @@ function submitData(){
 
     let ingredients = [];
     for(let i = 0; i < document.getElementById("ingredients").getElementsByTagName("li").length; i++){
-      ingredients.push({ ingredient: $('#ingredient' + i).val(), quantity: $('#quantity' + i).val()});
+      ingredients.push({ ingredient: $('#ingredient' + i).val(), quantity: $('#quantity' + i).val(), quantity: $('#type' + i).val()});
     }
 
     let method = [];
