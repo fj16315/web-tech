@@ -14,6 +14,7 @@ let ed = require('edit-distance');
 let validUrl = require('valid-url');
 let parseJson = require('parse-json');
 let https = require('https');
+let http = require('http');
 
 // Initialize global variables
 
@@ -52,7 +53,7 @@ let psAllStepFromSteps = db.prepare('select Step from Steps where IdR = ?');
 //db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
 let psAllQuantityIngredientFromIngredientsRecipe_Ingredient = db.prepare('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI');
 //db.all('select Title from Recipe', function(err, rows) {
-let psAllTitleRecipe = db.prepare('select Title from Recipe');
+let psAllTitleRecipe = db.prepare('select Title from Recipe where IdU = ?');
 //db.all('select OrderNo, Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
 let psAllOrderNoStepFromSteps = db.prepare('select OrderNo, Step from Steps where IdR = ?');
 //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
@@ -67,6 +68,8 @@ let psRunInsertIgnoreIngredient = db.prepare('insert or ignore into Ingredients 
 let psRunInsertIgnoreRecipe_Ingredient = db.prepare('insert or ignore into Recipe_Ingredient (IdI, IdR, Quantity) values (?, ?, ?)');
 //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
 let psRunInsertSteps = db.prepare('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)');
+let psRunDeleteRecipe = db.prepare('delete from Recipe where IdR = ?');
+let psRunDeleteSteps = db.prepare('delete from Recipe where IdR = ?');
 
 // Start server on specified port
 
@@ -79,8 +82,12 @@ let psRunInsertSteps = db.prepare('insert into Steps (Step, OrderNo, IdR) values
 https.createServer({
   key: fs.readFileSync('server.key'),
   cert: fs.readFileSync('server.cert')
-}, app).listen(8080, function() {
-  console.log("Listening!");
+}, app).listen(3000, function() {
+  console.log("Listening on https!");
+});
+
+http.createServer(app).listen(8080, function() {
+  console.log("Listening on http!");
 });
 
 // Initialize sessions
@@ -412,19 +419,16 @@ app.post('/logout', function(req, res){
   res.redirect('/login');
 });
 
+// Post request for get user's recipes
 app.post('/getUserResults', function(req, res, next){
   console.log("User recipes requested");
   //TODO!
   console.log("TODO!");
-  let results = [];
-  db.all('select Title from Recipe', function(err, rows) { //PLACEHOLDER <- returns all searches for salad
-  //psAllTitleRecipe.all(function(err, rows) {
+  let results = { titles: [] };
+  //db.all('select Title from Recipe', function(err, rows) { //PLACEHOLDER <- returns all searches for salad
+  psAllTitleRecipe.all(req.user.IdU, function(err, rows) {
     for (let i = 0; i < rows.length; i++) {
-      let lev = ed.levenshtein(rows[i].Title, "Salad", insert, remove, update);
-      if(lev.distance <= 2){
-        results.push({Title:rows[i].Title,CookTime:row[i].CookTime,PrepTime:row[i].PrepTime,IdR:row[i].IdR});
-        //results.push({ title: rows[i], difficulty: difficulty[i] })
-      }
+      results.titles.push(rows[i].Title);
     }
     //for(each title)
       //get the edit distance
@@ -547,6 +551,23 @@ app.post('/AddRecipe', function(req, res, next) {
               }
             });
           }
+        }
+      });
+    }
+  });
+});
+
+// Post request for deleting a recipes
+app.post('/DeleteRecipe', function(req, res, next) {
+  psRunDeleteRecipe.run(req.body.IdR, function(err) {
+    if (err) {
+      next(err);
+    } else {
+      psRunDeleteSteps.run(req.body.IdR, function(err1) {
+        if (err1) {
+          next(err1);
+        } else {
+          next();
         }
       });
     }
