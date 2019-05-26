@@ -194,7 +194,7 @@ passport.use('local-signup', new LocalStrategy(function(username, password, done
       let salt = genRandomSalt();
       let hash = hashPassword(password, salt);
       //db.run("insert into users (username, password, salt, Recipe_Count) values (?, ?, ?, 0)", username, hash, salt);
-      psGetUsernameFromUsers.run(username, hash, salt);
+      psRunInsertUser.run(username, hash, salt);
       //db.get("select IdU, username from users where username = ?", username, function(err, row) {
       psGetIdUUsernameFromUsers_Username.get(username, function(err, row) {
         return done(null, row);
@@ -544,8 +544,6 @@ app.post('/AddRecipe', function(req, res, next) {
                     psRunInsertIgnoreRecipe_Ingredient.run(rowI.IdI, row.IdR, req.body.Ingredients[j].quantity, function(err6) {
                       if (err6) {
                         next(err6);
-                      } else {
-                        res.redirect('/profile');
                       }
                     });
                   }
@@ -553,6 +551,7 @@ app.post('/AddRecipe', function(req, res, next) {
               }
             });
           }
+          res.redirect('/profile');
         }
       });
     }
@@ -578,6 +577,42 @@ app.post('/deleteRecipe', function(req, res, next) {
               res.redirect('/profile');
             }
           })
+        }
+      });
+    }
+  });
+});
+
+app.post('/deleteUser', function(req, res, next) {
+  db.all('select IdR from Recipe where IdU = ?', req.user.IdU, function(err, rows) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("rows.length: " + rows.length);
+      for (let i = 0; i < rows.length; i++) {
+        db.run('delete from Steps where IdR = ?', rows[i].IdR, function(err1) {
+          if (err1) {
+            next(err1);
+          } else {
+            db.run('delete from Recipe_Ingredient where IdR = ?', rows[i].IdR, function(err2) {
+              if (err2) {
+                next(err2);
+              }
+            });
+          }
+        });
+      }
+      db.run('delete from Recipe where IdU = ?', req.user.IdU, function(err3) {
+        if (err3) {
+          next(err3);
+        } else {
+          db.run('delete from users where IdU = ?', req.user.IdU, function(err4) {
+            if (err4) {
+              next(err4);
+            } else {
+              res.redirect('/');
+            }
+          });
         }
       });
     }
