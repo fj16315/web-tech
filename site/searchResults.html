@@ -33,19 +33,12 @@
         <div class="collapse navbar-collapse" id="myNavBar">
           <ul class="nav navbar-nav navbar-left">
             <li><a href="/">Home</a></li>
-            <li class="active"><a href="searchResults">Recipes</a></li>
+            <li><a href="searchResults">Recipes</a></li>
             <li><a href="about">About</a></li>
+            <li class="active"><a href="searchResults">Search</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <div class="navbar-form navbar-left">
-              <div class="input-group" id="searchBar">
-                <input type="text" id="search" class="form-control" name="search" placeholder="Search"/>
-                <div class="input-group-btn">
-                  <button class="btn btn-default" id="searchButton" onclick="search();">
-                    <i class="glyphicon glyphicon-search"></i>
-                  </button>
-                </div>
-              </div>
             </div>
             <li id="signup"><a href="signup"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
             <li id="login"><a href="login"><span class="glyphicon glyphicon-log-in"></span>Login</a></li>
@@ -55,8 +48,15 @@
     </nav>
 
     <div class="container">
+      <div class="input-group" id="searchBar">
+        <input type="text" id="search" class="form-control" name="search" placeholder="Search"/>
+        <div class="input-group-btn">
+          <button class="btn btn-default" id="searchButton" onclick="search();">
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </div>
       <hgroup>
-        <h1>Search Results</h1>
         <h2 id="searchTerm"></h2>
       </hgroup>
       <div id="searchResults" class="col-xs-12 col-sm-6 col-md-12">

@@ -2,7 +2,7 @@ function loadRecipeDetails(str) {
   console.log("loading Recipe");
   console.log(str);
   if(str == ""){
-    $('#notLoading').replaceWith('<h1 id="notLoading">Search for something!</h1>');
+    $('#notLoading').replaceWith('<h1 id="notLoading"></h1>');
   }
   else{
     $('#notLoading').replaceWith('<div id="loading"></div>');
