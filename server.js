@@ -69,7 +69,8 @@ let psRunInsertIgnoreRecipe_Ingredient = db.prepare('insert or ignore into Recip
 //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
 let psRunInsertSteps = db.prepare('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)');
 let psRunDeleteRecipe = db.prepare('delete from Recipe where IdR = ?');
-let psRunDeleteSteps = db.prepare('delete from Recipe where IdR = ?');
+let psRunDeleteSteps = db.prepare('delete from Steps where IdR = ?');
+let psRunDeleteRecipe_Ingredient = db.prepare('delete from Recipe_Ingredient where IdR = ?');
 
 // Start server on specified port
 
@@ -559,16 +560,24 @@ app.post('/AddRecipe', function(req, res, next) {
 });
 
 // Post request for deleting a recipes
-app.post('/DeleteRecipe', function(req, res, next) {
-  psRunDeleteRecipe.run(req.body.IdR, function(err) {
+app.post('/deleteRecipe', function(req, res, next) {
+  console.log("Deleting!");
+  console.log("req.body.IdR: " + req.body.IdR);
+  psRunDeleteSteps.run(req.body.IdR, function(err) {
     if (err) {
       next(err);
     } else {
-      psRunDeleteSteps.run(req.body.IdR, function(err1) {
+      psRunDeleteRecipe_Ingredient.run(req.body.IdR, function(err1) {
         if (err1) {
           next(err1);
         } else {
-          next();
+          psRunDeleteRecipe.run(req.body.IdR, function(err2) {
+            if (err2) {
+              next(err2);
+            } else {
+              res.redirect('/profile');
+            }
+          })
         }
       });
     }
