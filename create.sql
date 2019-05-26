@@ -1,1 +1,1 @@
-select IdR from Recipe order by IdR desc limit 1;
+select count(IdR) from Recipe where IdU = 7;

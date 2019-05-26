@@ -68,8 +68,12 @@ let psRunInsertIgnoreIngredient = db.prepare('insert or ignore into Ingredients 
 let psRunInsertIgnoreRecipe_Ingredient = db.prepare('insert or ignore into Recipe_Ingredient (IdI, IdR, Quantity) values (?, ?, ?)');
 //db.run('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)', req.query.Steps[i], i+1, IdR, function(err) {
 let psRunInsertSteps = db.prepare('insert into Steps (Step, OrderNo, IdR) values (?, ?, ?)');
-let psRunDeleteRecipe = db.prepare('delete from Recipe where IdR = ?');
-let psRunDeleteSteps = db.prepare('delete from Recipe where IdR = ?');
+let psRunDeleteRecipe_IdR = db.prepare('delete from Recipe where IdR = ?');
+let psRunDeleteSteps = db.prepare('delete from Steps where IdR = ?');
+let psRunDeleteRecipe_Ingredient = db.prepare('delete from Recipe_Ingredient where IdR = ?');
+let psRunDeleteUser = db.prepare('delete from users where IdU = ?');
+let psRunDeleteRecipe_IdU = db.prepare('delete from Recipe where IdU = ?');
+let psRunUpdateUsersRecipe_Count = db.prepare('update users set Recipe_Count = Recipe_Count + 1 where IdU = ?');
 
 // Start server on specified port
 
@@ -193,7 +197,7 @@ passport.use('local-signup', new LocalStrategy(function(username, password, done
       let salt = genRandomSalt();
       let hash = hashPassword(password, salt);
       //db.run("insert into users (username, password, salt, Recipe_Count) values (?, ?, ?, 0)", username, hash, salt);
-      psGetUsernameFromUsers.run(username, hash, salt);
+      psRunInsertUser.run(username, hash, salt);
       //db.get("select IdU, username from users where username = ?", username, function(err, row) {
       psGetIdUUsernameFromUsers_Username.get(username, function(err, row) {
         return done(null, row);
@@ -543,8 +547,6 @@ app.post('/AddRecipe', function(req, res, next) {
                     psRunInsertIgnoreRecipe_Ingredient.run(rowI.IdI, row.IdR, req.body.Ingredients[j].quantity, function(err6) {
                       if (err6) {
                         next(err6);
-                      } else {
-                        res.redirect('/profile');
                       }
                     });
                   }
@@ -552,6 +554,13 @@ app.post('/AddRecipe', function(req, res, next) {
               }
             });
           }
+          psRunUpdateUsersRecipe_Count.run(req.user.IdU, function(err7) {
+            if (err7) {
+              next(err7);
+            } else {
+              res.redirect('/profile');
+            }
+          });
         }
       });
     }
@@ -559,16 +568,61 @@ app.post('/AddRecipe', function(req, res, next) {
 });
 
 // Post request for deleting a recipes
-app.post('/DeleteRecipe', function(req, res, next) {
-  psRunDeleteRecipe.run(req.body.IdR, function(err) {
+app.post('/deleteRecipe', function(req, res, next) {
+  console.log("Deleting!");
+  console.log("req.body.IdR: " + req.body.IdR);
+  psRunDeleteSteps.run(req.body.IdR, function(err) {
     if (err) {
       next(err);
     } else {
-      psRunDeleteSteps.run(req.body.IdR, function(err1) {
+      psRunDeleteRecipe_Ingredient.run(req.body.IdR, function(err1) {
         if (err1) {
           next(err1);
         } else {
-          next();
+          psRunDeleteRecipe_IdR.run(req.body.IdR, function(err2) {
+            if (err2) {
+              next(err2);
+            } else {
+              res.redirect('/profile');
+            }
+          })
+        }
+      });
+    }
+  });
+});
+
+// Post request for deleting a user
+app.post('/deleteUser', function(req, res, next) {
+  db.all('select IdR from Recipe where IdU = ?', req.user.IdU, function(err, rows) {
+    if (err) {
+      next(err);
+    } else {
+      console.log("rows.length: " + rows.length);
+      for (let i = 0; i < rows.length; i++) {
+        psRunDeleteSteps.run(rows[i].IdR, function(err1) {
+          if (err1) {
+            next(err1);
+          } else {
+            psRunDeleteRecipe_Ingredient.run(rows[i].IdR, function(err2) {
+              if (err2) {
+                next(err2);
+              }
+            });
+          }
+        });
+      }
+      psRunDeleteRecipe_IdU.run(req.user.IdU, function(err3) {
+        if (err3) {
+          next(err3);
+        } else {
+          psRunDeleteUser.run(req.user.IdU, function(err4) {
+            if (err4) {
+              next(err4);
+            } else {
+              res.redirect('/');
+            }
+          });
         }
       });
     }

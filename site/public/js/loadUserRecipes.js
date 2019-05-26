@@ -52,8 +52,15 @@ function removeRecipe(rId){
       // code for IE6, IE5
       xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
-    xmlhttp.open("POST","DeleteRecipe", true);
-    xmlhttp.send();
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log("Blep");
+      }
+    };
+    let id = JSON.stringify({IdR:rId});
+    xmlhttp.open("POST","deleteRecipe", true);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(id);
   }
   else{
     console.log("cancelled deletion of: " + rId);
