@@ -15,15 +15,6 @@
   background-position: center;
 }
 
-.navbar-brand{
-  float: left;
-  min-height: 55px;
-  /* max-height: 10px; */
-  max-width:  200px;
-  padding: 0 15px 15px;
-}
-
-
 #message{
   display: none;
   background: #f1f1f1;

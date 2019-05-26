@@ -13,8 +13,8 @@ function changelogin(){
       console.log(this.responseText);
       if(this.responseText == "true"){
         console.log("logged in!");
-        $("#signup").replaceWith('<li><a href="/profile"><span class="glyphicon glyphicon-user"></span>profile</a></li>');
-        $("#login").replaceWith('<li><form class="form" action="/logout" method="post"><button><span class="glyphicon glyphicon-log-out"></span>logout</button></form></li>');
+        $("#signup").replaceWith('<li><a href="/profile"><span class="glyphicon glyphicon-user"></span> profile</a></li>');
+        $("#login").replaceWith('<li><form class="form" action="/logout" method="post"><button id="logout" class="form-control"><span class="glyphicon glyphicon-log-out"></span> logout</button></form></li>');
         console.log("Should've changed");
       }
       else {

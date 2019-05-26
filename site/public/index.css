@@ -1,9 +1,13 @@
+body{
+  font-family: "Montserrat", Helvetica, sans-serif;
+}
+
 .navbar{
   margin-bottom: 0;
   border-radius: 0;
   background-color: #618985;
   color: #FFF;
-  padding: 1% 0;
+  padding: 0.2% 0;
   font-size: 1.2em;
   border: 0;
 }
@@ -11,7 +15,6 @@
 .navbar-brand{
   float: left;
   min-height: 55px;
-  /* max-height: 10px; */
   max-width:  200px;
   padding: 10px 15px 15px;
 }
@@ -25,23 +28,24 @@
   color: #D5D5D5;
 }
 
-#searchBar {
-  padding-left: 10px;
-}
-
-#searchButton {
-  float: right;
-  padding: 6px 10px;
-  //margin-top: 8px;
-  margin-right: 16px;
-  background: #ddd;
-  font-size: 16px;
+#logout{
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border-style: solid;
   border: none;
-  cursor: pointer;
+  -webkit-box-shadow: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  margin-top: 10px;
+  width: 100px;
+  font-size: 1em;
+  outline: none;
+  color: #D5D5D5;
 }
 
-#search:hover {
-  background: #ccc;
+#logout:hover{
+  color: #FFF;
 }
 
 .container{
@@ -53,38 +57,15 @@
   margin: 1% auto;
 }
 
+@media (max-width: 600px){
+  #icon{
+    max-width: 150px;
+  }
+}
+
 footer{
   width = 100%;
   background-color: #618985;
   padding: 3%;
   color: #FFF;
-}
-
-.fa{
-  padding: 15px;
-  font-size: 25px;
-  color: #FFF;
-}
-.fa:hover{
-  color: #D5D5D5;
-  text-decoration: none;
-}
-
-@media (max-width: 900px){
-  .fa{
-    font-size: 20px;
-    padding: 10x
-  }
-}
-
-@media (max-width: 600px){
-  .carousel-caption{
-    display: none;
-  }
-  #icon{
-    max-width: 150px;
-  }
-  h2{
-    font-size: 1.0em;
-  }
 }

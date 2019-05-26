@@ -14,3 +14,35 @@
 @keyframes play {
    100% { background-position: -2000px; }
 }
+
+.fa{
+  padding: 15px;
+  font-size: 25px;
+  color: #FFF;
+}
+.fa:hover{
+  color: #D5D5D5;
+  text-decoration: none;
+}
+
+@media (max-width: 900px){
+  .fa{
+    font-size: 20px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 600px){
+  .carousel-caption{
+    display: none;
+  }
+  h2{
+    font-size: 1.0em;
+  }
+}
+
+.carousel-inner h1{
+  top: 50%;
+  transform: translateY(-50%);
+  color: #FFF;
+}
