@@ -7,7 +7,7 @@ function filterResults(){
     console.log(results[i]);
     //get cooktime from article
     let cooktime = parseInt($(results[i]).find('#cookTime').text());
-    if(cooktime > 10){
+    if(cooktime > maxCookTime){
       console.log("hiding");
       $(results[i]).hide();
       console.log(results[i]);
