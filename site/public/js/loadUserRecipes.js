@@ -25,14 +25,14 @@ function loadUserRecipes(){
       //Get all the elements and put them in a search result
 
       //replace the results with no results!
-      if(a.titles.length == 0){
+      if(a.length == 0){
         $('#results').append('<p>No results!</p>');
       }
       else{
         //foreach(recipe in response );
-        for(let i = 0; i<a.titles.length; i++){
+        for(let i = 0; i<a.length; i++){
         // $('#results').append('<h1> Wow! </h1>');
-        $('#results').append('<li><article class="search-result row"><div class="col-xs-12 col-sm-4"><a href="' + '/recipe_template?IdR=1' + '" title="' + a.titles[i] + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a.titles[i] + '" /></a></div><div class="col-xs-6 col-xs-4"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a.titles[i] + '</a></h3><li><i class="glyphicon glyphicon-time"><span>a time?</span></i></li></ul></div><div class="col-xs-6 col-sm-4"><button class="btn btn-danger" onclick="removeRecipe(' + " 'input!'"  + ');">Remove!</button></div><span class="clearfix borda"></span></article></li>');
+        $('#results').append('<li><article class="search-result row"><div class="col-xs-12 col-sm-4"><a href="' + '/recipe_template?IdR=1' + '" title="' + a[i].title + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a[i].title + '" /></a></div><div class="col-xs-6 col-xs-4"><ul class="meta-search"><h3><a href="/recipe_template?IdR=1">' + a[i].title + '</a></h3><li><i class="glyphicon glyphicon-time"><span>a time?</span></i></li></ul></div><div class="col-xs-6 col-sm-4"><button class="btn btn-danger" onclick="removeRecipe(' + " 'input!'"  + ');">Remove!</button></div><span class="clearfix borda"></span></article></li>');
         }
       }
     }

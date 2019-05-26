@@ -53,7 +53,7 @@ let psAllStepFromSteps = db.prepare('select Step from Steps where IdR = ?');
 //db.all('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI', req.query.IdR, function(err, rows) {
 let psAllQuantityIngredientFromIngredientsRecipe_Ingredient = db.prepare('select Quantity, Ingredient from Ingredients, Recipe_Ingredient where Recipe_Ingredient.IdR = ? and Ingredients.IdI = Recipe_Ingredient.IdI');
 //db.all('select Title from Recipe', function(err, rows) {
-let psAllTitleRecipe = db.prepare('select Title from Recipe where IdU = ?');
+let psAllTitleCooking_TimePrep_TimeIdRFromRecipe = db.prepare('select Title, Cooking_Time, Prep_Time, IdR from Recipe where IdU = ?');
 //db.all('select OrderNo, Step from Steps where IdR = ?', req.query.IdR, function(err, rows) {
 let psAllOrderNoStepFromSteps = db.prepare('select OrderNo, Step from Steps where IdR = ?');
 //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
@@ -424,11 +424,11 @@ app.post('/getUserResults', function(req, res, next){
   console.log("User recipes requested");
   //TODO!
   console.log("TODO!");
-  let results = { titles: [] };
+  let results = [];
   //db.all('select Title from Recipe', function(err, rows) { //PLACEHOLDER <- returns all searches for salad
-  psAllTitleRecipe.all(req.user.IdU, function(err, rows) {
+  psAllTitleCooking_TimePrep_TimeIdRFromRecipe.all(req.user.IdU, function(err, rows) {
     for (let i = 0; i < rows.length; i++) {
-      results.titles.push(rows[i].Title);
+      results.push({title:rows[i].Title, cookTime:rows[i].Cooking_Time, prepTime:rows[i].Prep_Time, IdR:rows[i].IdR});
     }
     //for(each title)
       //get the edit distance
