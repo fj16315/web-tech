@@ -6,12 +6,14 @@ head
   meta(name='viewport' content='width=device-width, initial-scale=1')
   link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
-  link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat&amp;display=swap'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat&amp;display=swap'/>
   link(rel='stylesheet' href='index.css')
+  link(rel='stylesheet' href='recipe_template.css')
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')
   script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
   script(src='js/generatelogin.js')
-body
+  script(src='js/smoothScroll.js')
+<body onload="changelogin();">
   nav.navbar.navbar-inverse
     .container-fluid
       .navbar-header
@@ -28,58 +30,44 @@ body
           li
             a(href='searchResults') Search
         ul.nav.navbar-nav.navbar-right
-          li#profile
-            a(href='profile')
+          li#signup
+            a(href='signup')
               span.glyphicon.glyphicon-user
-              |  Profile
-          li
-            form.form(action='/logout', method='post')
-              button#logout.form-control
-                span.glyphicon.glyphicon-log-out
-                |  Logout
-  .container
-    .row
-      .col-md-4.col-sm-4
-        img(src='#')
-      .col-md-6.col-sm-4
-        h1= title
-        .col-md-4.col-sm-12
-          h4 Prep time: #{prep_time}
-          h4 Cooking time: #{cooking_time}
-        .col-md-4.col-sm-12
-          h4 Difficulty: #{rating}
-          h4 Serves: #{serves}
-        .col-md-12
-          p Save, share and stuff?
-  .container
-    .row
-      .col-md-6
-        h1 Ingredients
-        ul
-          each ingredient in ingredients
-            li= ingredient
-      .col-md-6
-        h1 Method
-        ol
-          each step in steps
-            li= step
-  .container
-    .row
-      h2  Related recipes
-      p Add a recipe preview thing?
+              |  Sign Up
+          li#login
+            a(href='login')
+              span.glyphicon.glyphicon-log-in
+              |  Login
+  .wrapper
+    .container
+      .row
+        .col-xs-12
+          h1= title
+        .col-xs-12
+          .col-md-6.col-sm-12
+            h4 Prep time: #{prep_time}
+            h4 Cooking time: #{cooking_time}
+          .col-md-6.col-sm-12
+            h4 Difficulty: #{rating}
+            h4 Serves: #{serves}
+    .container
+      .row
+        .col-md-6
+          h1 Ingredients
+          ul(id='ingred')
+            each ingredient in ingredients
+              li= ingredient
+        .col-md-6
+          h1 Method
+          ol(id='method')
+            each step in steps
+              li= step
   footer.container-fluid.text-center
     .row
-      .col-lg-4.col-sm-4
-        h3 Contact Us
-        br
-        h4 Some contact gubbins
-      .col-lg-8.col-sm-4
-        h3 Connect
-        a.fa.fa-facebook(href='#')
-        a.fa.fa-twitter(href='#')
-        a.fa.fa-google(href='#')
-        a.fa.fa-linkedin(href='#')
-        a.fa.fa-youtube(href='#')
+      .col-xs-4
+      .col-xs-4
+        a(onclick='smoothScrollReset();')
+          <img src='imgs/logos/logo2.svg' alt="cookpot" class="img-responsive"/>
       .col-sm-4
-        h3 Logo
+  </body>
 </html>

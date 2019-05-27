@@ -30,6 +30,7 @@
     "express": "^4.17.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "path": "^0.12.7",
     "q-io": "^1.13.6",
     "react": "^16.8.1",
     "reload": "^3.0.1",
@@ -44,6 +45,7 @@
     "https": "^1.0.0",
     "parse-json": "^4.0.0",
     "pug": "^2.0.3",
+    "serve-favicon": "^2.5.0",
     "valid-url": "^1.0.9"
   }
 }

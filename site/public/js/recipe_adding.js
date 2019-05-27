@@ -6,6 +6,7 @@ function submitData(){
     alert("Please fill in all fields");
   }
   else{
+    alert("Recipe submitted!");
     let title = $('#title').val();
     let difficulty = $('#difficulty').val();
     let cookTime = $('#cookTime').val();
@@ -35,8 +36,8 @@ function submitData(){
 function isFormEmpty(){
   let isValid = false;
   $('#recipeData :input').each(function() {
-    console.log($(this).val());
-    console.log(this.type);
+    // console.log($(this).val());
+    // console.log(this.type);
     if(this.type !== "submit"){
       if($(this).val() === ""){
         console.log("Empty!");
@@ -54,7 +55,7 @@ function addIngredient(){
     let ingredQuan = "quantity" + length;
     let ingredType = "type" + length;
     console.log(length + ", " + ingredName + ", " + ingredQuan);
-    $('#ingredients').append('<li><div class="col-xs-6"><input type="text" class="form-control" id="' + ingredName + '" name="' + ingredName + '"/></div><div class="col-xs-3"><input type="text"  class="form-control" id="' + ingredQuan + '" name="' + ingredQuan + '"/></div><div class="col-xs-3"><select class="form-control" id="' + ingredType + '" name=" ' + ingredType + '"><option value="tsp">Teaspoon(s)</option><option value="tbsp">Tablespoon(s)</option><option value="ml">ml</option><option value="grams">grams</option><option value="x">items</option></select></div></li>');
+    $('#ingredients').append('<li><div class="col-xs-6"><input type="text" class="form-control" id="' + ingredName + '" name="' + ingredName + '"/></div><div class="col-xs-3"><input type="number"  class="form-control" id="' + ingredQuan + '" name="' + ingredQuan + '"/></div><div class="col-xs-3"><select class="form-control" id="' + ingredType + '" name=" ' + ingredType + '"><option value="tsp">Teaspoon(s)</option><option value="tbsp">Tablespoon(s)</option><option value="ml">ml</option><option value="grams">grams</option><option value="x">items</option></select></div></li>');
   }
   else{
     alert("Too many ingredients!");

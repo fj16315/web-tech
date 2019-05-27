@@ -37,7 +37,7 @@ function loadRecipeDetails(str) {
           for(let i = 0; i < a.length; i++){
           // $('#results').append('<h1> Wow! </h1>');
           // $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4">'+ a.titles[i] + '</div></article>');
-          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="/recipe_template?rID=' + a[i].title + '" title="' + a[i].title + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a[i].title + '" /></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=' + a[i].IdR + '">' + a[i].title + '</a></h3><span>Cook time: <i class="glyphicon glyphicon-time"></i> <a id="cookTime">' + a[i].cookTime  + '</a> | </span><span> Prep time: <i class="glyphicon glyphicon-time"></i> <a id="prepTime">' + a[i].prepTime  + '</a></span></ul></div><span class="clearfix borda"></span></article>');
+          $('#results').append('<article class="search-result row"><div class="col-xs-12"><ul class="meta-search"><h3><a href="/recipe_template?IdR=' + a[i].IdR + '">' + a[i].title + '</a></h3><span>Cook time: <i class="glyphicon glyphicon-time"></i> <a id="cookTime">' + a[i].cookTime  + '</a> | </span><span> Prep time: <i class="glyphicon glyphicon-time"></i> <a id="prepTime">' + a[i].prepTime  + '</a></span></ul></div><span class="clearfix borda"></span></article>');
           }
         }
       }

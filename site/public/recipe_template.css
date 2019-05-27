@@ -1,0 +1,16 @@
+html, body{
+  height:100%;
+}
+
+.wrapper{
+  min-height:100%;
+  height:100%;
+}
+
+#ingred{
+  background-color: #dbdbdb;
+}
+
+#method{
+  background-color: #dbdbdb;
+}

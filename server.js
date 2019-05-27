@@ -15,6 +15,8 @@ let validUrl = require('valid-url');
 let parseJson = require('parse-json');
 let https = require('https');
 let http = require('http');
+let favicon = require('serve-favicon');
+let path = require('path');
 
 // Initialize global variables
 
@@ -76,6 +78,8 @@ let psRunDeleteRecipe_IdU = db.prepare('delete from Recipe where IdU = ?');
 let psRunUpdateUsersRecipe_CountIncr = db.prepare('update users set Recipe_Count = Recipe_Count + 1 where IdU = ?');
 let psGetRecipe_CountFromUsers = db.prepare('select Recipe_Count from users where IdU = ?');
 let psRunUpdateUsersRecipe_CountDecr = db.prepare('update users set Recipe_Count = Recipe_Count - 1 where IdU = ?');
+let psAllIdRFromRecipe = db.prepare('select IdR from Recipe where IdU = ?');
+let psGetIdIFromIngredients = db.prepare('select IdI from Ingredients where Ingredient = ? and Type = ?');
 
 // Start server on specified port
 
@@ -109,6 +113,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session(sessionOpts));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(favicon(path.join(__dirname, '/site/public/imgs', 'favicon.ico')));
 
 // Declare functions
 
@@ -430,7 +435,7 @@ app.post('/signup', passport.authenticate('local-signup', { session: true, succe
 // Post request for logging out
 app.post('/logout', function(req, res){
   req.logout();
-  res.redirect('/login');
+  res.redirect('/');
 });
 
 // Post request for get user's recipes
@@ -523,9 +528,10 @@ app.post('/getRecipe', function(req, res, next) {
 });
 
 // Post request for adding a new recipe
-app.post('/AddRecipe', function(req, res, next) {
+app.post('/AddRecipe', protected, function(req, res, next) {
   //db.run('insert into Recipe (Title, Serves, Rating, IdU) values (?, ?, ?, ?)', req.query.Title, req.query.Serves, req.query.Rating, req.user.IdU, function(err) {
   console.log("--- adding recipe! ---");
+  console.log(req.body);
   psRunInsertRecipe.run(req.body.Title, req.body.Serves, req.body.Rating, req.user.IdU, req.body.PrepTime, req.body.CookTime, function(err1) {
     if (err1) {
       next(err1);
@@ -548,7 +554,8 @@ app.post('/AddRecipe', function(req, res, next) {
               if (err4) {
                 next(err4);
               } else {
-                db.get('select IdI from Ingredients order by IdI desc limit 1', function(err5, rowI) {
+                //db.get('select IdI from Ingredients where Ingredient = ? and Type = ?', req.body.Ingredients[j].ingredient, req.body.Ingredients[j].type, function(err5, rowI) {
+                psGetIdIFromIngredients.get(req.body.Ingredients[j].ingredient, req.body.Ingredients[j].type, function(err5, rowI) {
                   if (err5) {
                     next(err5);
                   } else {
@@ -610,7 +617,8 @@ app.post('/deleteRecipe', function(req, res, next) {
 
 // Post request for deleting a user
 app.post('/deleteUser', function(req, res, next) {
-  db.all('select IdR from Recipe where IdU = ?', req.user.IdU, function(err, rows) {
+  //db.all('select IdR from Recipe where IdU = ?', req.user.IdU, function(err, rows) {
+  psAllIdRFromRecipe.all(req.user.IdU, function(err, rows) {
     if (err) {
       next(err);
     } else {

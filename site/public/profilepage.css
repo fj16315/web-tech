@@ -17,3 +17,18 @@ ul{
   padding-top: 100px;
   padding-bottom: 100px;
 }
+
+html, body{
+  height:100%;
+}
+
+.wrapper{
+  min-height:100vh;
+}
+
+footer{
+  clear:both;
+  position:relative;
+  height:150px;
+  margin-top:-150px;
+}

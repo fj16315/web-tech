@@ -5,11 +5,11 @@ ul{
 }
 
 ul li{
-  margin-bottom:10px;
+  padding-bottom:10px;
 }
 
 ol li{
-  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 #controlButtons div{

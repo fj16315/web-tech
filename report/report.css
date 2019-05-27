@@ -1,0 +1,15 @@
+#loading{
+  width: 200px;
+  height: 120px;
+  background: url('imgs/loadingsprite.png') left center;
+  animation: play .8s steps(10) infinite;
+}
+
+@keyframes play {
+   100% { background-position: -2000px; }
+}
+
+img{
+  max-height:300px;
+  max-width:500px;
+}

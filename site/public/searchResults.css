@@ -12,3 +12,19 @@
 #searchButton{
   height: 34px;
 }
+
+html, body{
+  height:100%;
+}
+
+.wrapper{
+  min-height:100vh;
+  padding-bottom:200px;
+}
+
+footer{
+  clear:both;
+  position:relative;
+  height:150px;
+  margin-top:-150px;
+}

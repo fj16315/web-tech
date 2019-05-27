@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Web Tech Report: Prelim</title>
+  <link href="report.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+  <h1>Web Tech Report: FINAL</h1>
+
+  <h2>Team</h2>
+  <p>
+    <ul>
+      <li>
+        Joseph Mills  - jm16577
+      </li>
+      <li>
+        Freddie Jones - fj16315
+      </li>
+    </ul>
+  </p>
+
+  <h2>Topic</h2>
+  <p>
+    Our website is designed to allow students to upload, share and view recipes.
+  </p>
+
+  <h3>Report</h3>
+    <ul>
+      <li>
+        <h3>HTML</h3>
+        <ul>
+          <li>
+            We serve web pages as XHTML
+          </li>
+          <li>
+            We have written a variety of HTML pages.
+          </li>
+          <li>
+            Tried our website out in a number of different screen resolutions to ensure it would work on all devices.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>CSS</h3>
+        <ul>
+          <li>
+            We used bootstrap as a css framework but also wrote our own css to make the behave how we wanted to.
+          </li>
+          <li>
+            There is no inline CSS and the javascript is seperated as much as possible
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>JS</h3>
+        <ul>
+          <li>
+            We have written several scripts for interaction with the page HTML as well as interaction with the server.
+            <ul>
+              <li>
+                Loading search results (both on search page and user page).
+              </li>
+              <li>
+                Adding/ removing elements (variable length ingredients/method in adding recipe).
+              </li>
+              <li>
+                Switching elements based on whether you are signed in (login/logout and signup/profile).
+              </li>
+              <li>
+                Bluring images on hover (homepage carousel links).
+              </li>
+              <li>
+                Smooth scrolling between elements. (Clicking on the footer smooth scrolls to top).
+              </li>
+              <li>
+                Sending a user/ recipe to be added to the backend (adding recipe/signup).
+              </li>
+              <li>
+                Form validation (adding recipe).
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>PNG</h3>
+        <ul>
+          <li>
+            We edited existing PNG images (e.g. resizing and bluring) using paint.net, these can be seen on the homepage. These blurred image however not used as this was done with CSS instead.
+          </li>
+          <li>
+            Created our own PNG's using paint.net. e.g. The cooking pot loading animation was made this way (when loading in the search page).
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>SVG</h3>
+          <ul>
+            <li>
+              We have created our own SVG logo and icons using inkscape, using layers path editing and grouping as can be seen in the logo.
+            </li>
+          </ul>
+      </li>
+      <li>
+        <h3>Server</h3>
+        <ul>
+          <li>
+            We wrote our own server using Express
+          </li>
+          <li>
+            The server proforms URL validation using valid-url
+          </li>
+          <li>
+            We used passport, crypro and express sessions to manage login and session cookies.
+          </li>
+          <li>
+            We have used prepared statements to prevent SQL-injection attacks.
+          </li>
+          <li>
+            Our website is self certified such that the server runs http on port:8080 and https on port:3000.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>database</h3>
+        <ul>
+          <li>
+            We used SQLite for database management.
+          </li>
+          <li>
+            It is possible and remove recipes and accounts.
+          </li>
+          <li>
+            Ensured no duplications of data inside the database.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h3>Dynamic Pages</h3>
+        <ul>
+          <li>
+            We used pug as an express vue engine for HTML templating to display the individual recipe pages.
+          </li>
+          <li>
+            We used javascript and jQuery in order to manipulate page content and provide dynamic web pages e.g. loading search results.
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+  <h3>Screenshots</h3>
+  <ul>
+    <li>
+      <h4>SVG Logo</h4>
+      <img src="imgs/Logo2.svg" id='logo' alt="SVG logo"/>
+    </li>
+
+    <li>
+      <h4>Cooking pot png animation</h4>
+      <img src="imgs/loadingsprite.png" alt="Cookig pot loading png animation"/>
+      <div id="loading"></div>
+      <!-- <img src="imgs/loadingsprite.png" id="loading" alt="Cookig pot loading png animation"/> -->
+    </li>
+
+    <li>
+      <h4>Screenshot of homepage</h4>
+      <img src="imgs/homepage.png" alt="homepage Screenshot"/>
+    </li>
+
+    <li>
+      <h4>Screenshot of the profile page</h4>
+      <img src="imgs/profile.png" alt="homepage Screenshot"/>
+    </li>
+
+    <li>
+      <h4>Screenshot of the search page</h4>
+      <img src="imgs/search.png" alt="homepage Screenshot"/>
+    </li>
+  </ul>
+
+  <h2>Resources</h2>
+  <ul>
+    <!-- pug -->
+    <li>
+      <h4>pug</h4>
+      <a href="https://pugjs.org/api/getting-started.html"> https://pugjs.org/api/getting-started.html</a>
+    </li>
+
+    <!-- bootstrap -->
+    <li>
+      <h4>Bootstrap</h4>
+      <a href="https://getbootstrap.com/"> https://getbootstrap.com/</a>
+    </li>
+
+    <!-- passport -->
+    <li>
+      <h4>Passport</h4>
+      <a href="www.passportjs.org/packages/passport-local/"> www.passportjs.org/packages/passport-local/</a>
+    </li>
+  </ul>
+</body>
+</html>
