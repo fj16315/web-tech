@@ -8,6 +8,10 @@
   box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.75);
 }
 
+.btn-danger{
+  margin-top: 60px;
+}
+
 #testBackground{
   background-image: url(imgs/stock/ingredients.jpeg);
   background-repeat: no-repeat;
@@ -56,12 +60,10 @@ footer{
   color: #FFF;
 }
 
-.fa{
-  padding: 15px;
-  font-size: 25px;
-  color: #FFF;
+h1, label, p{
+  color: #f2f7ff;
 }
-.fa:hover{
-  color: #D5D5D5;
-  text-decoration: none;
+
+a{
+   text-shadow: 0px 0px 1px white;
 }

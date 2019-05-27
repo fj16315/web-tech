@@ -38,7 +38,7 @@ body{
   overflow: hidden;
   outline:none;
   margin-top: 10px;
-  width: 100px;
+  width: 110px;
   font-size: 1em;
   outline: none;
   color: #D5D5D5;
@@ -68,4 +68,6 @@ footer{
   background-color: #618985;
   padding: 3%;
   color: #FFF;
+  bottom:0;
+  width:100%;
 }

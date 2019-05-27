@@ -3,3 +3,32 @@ ul{
   margin: 0;
   padding: 0;
 }
+
+ul li{
+  padding-top: 10px;
+}
+
+ol li{
+  padding-top: 10px;
+}
+
+#controlButtons div{
+  padding-top: 10px;
+}
+
+.btn-primary{
+  background-color: #89ffa1;
+  border-color: #aaffbb;
+  color: #000;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+  background-color: #89ffa1;
+  border-color: #aaffbb;
+  color: #000;
+}
+
+.btn-secondary{
+  background-color: #ff8989;
+  border-color: #ffaaaa;
+}

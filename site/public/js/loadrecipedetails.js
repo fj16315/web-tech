@@ -25,7 +25,7 @@ function loadRecipeDetails(str) {
         //update saving term
         $('#searchTerm').replaceWith('<h2 id="searchTerm">Result for <strong>' + str + '</strong></h2>');
 
-        $('#loading').replaceWith('<div id="notLoading" class="col-xs-12"><div id="results"></div></div>');
+        $('#loading').replaceWith('<div id="notLoading" class="col-xs-12"><div class="container" id="filter"><p><a href="#collapseFilter" data-toggle="collapse">In a hurry? Filter by time!</a></p><div class="collapse" id="collapseFilter"><div class="row"><div class="col-xs-6"><label for="cookTimeFilter">Cook time</label><input class="form-control" type="number" id="cookTimeFilter" onkeyup="filterResults();"/></div><div class="col-xs-6"><label for="prepTimeFilter">Prep Time</label><input class="form-control" type="number" id="prepTimeFilter" onkeyup="filterResults();"/></div></div></div></div><div id="results"></div></div>');
         //Get all the elements and put them in a search result
 
         //replace the results with no results!
@@ -37,7 +37,7 @@ function loadRecipeDetails(str) {
           for(let i = 0; i < a.length; i++){
           // $('#results').append('<h1> Wow! </h1>');
           // $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4">'+ a.titles[i] + '</div></article>');
-          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="/recipe_template?rID=' + a[i].title + '" title="' + a[i].title + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a[i].title + '" /></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=' + a[i].IdR + '">' + a[i].title + '</a></h3><i class="glyphicon glyphicon-time"><span><a id="cookTime">' + a[i].cookTime  + '</a></span></i><i class="glyphicon glyphicon-time"><span><a id="prepTime">' + a[i].prepTime  + '</a></span></i></ul></div><span class="clearfix borda"></span></article>');
+          $('#results').append('<article class="search-result row"><div class="col-xs-12 col-sm-12 col-md-4"><a href="/recipe_template?rID=' + a[i].title + '" title="' + a[i].title + '" class="thumbnail"><img src="imgs/logos/logo.png" alt="' + a[i].title + '" /></a></div><div class="col-xs-12 col-sm-12 col-md-8"><ul class="meta-search"><h3><a href="/recipe_template?IdR=' + a[i].IdR + '">' + a[i].title + '</a></h3><span>Cook time: <i class="glyphicon glyphicon-time"></i> <a id="cookTime">' + a[i].cookTime  + '</a> | </span><span> Prep time: <i class="glyphicon glyphicon-time"></i> <a id="prepTime">' + a[i].prepTime  + '</a></span></ul></div><span class="clearfix borda"></span></article>');
           }
         }
       }

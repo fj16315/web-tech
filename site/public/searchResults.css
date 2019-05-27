@@ -8,3 +8,7 @@
 @keyframes play {
    100% { background-position: -2000px; }
 }
+
+#searchButton{
+  height: 34px;
+}

@@ -15,8 +15,6 @@ lang="en-GB" xml:lang="en-GB">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="js/generatelogin.js"></script>
   <script src="js/recipe_adding.js"></script>
-  <script src="js/onloadListener.js"></script>
-  <script src="js/serverAddRecipe.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-inverse">
@@ -27,25 +25,26 @@ lang="en-GB" xml:lang="en-GB">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="imgs/logos/logo2.svg" class="img-responsive"/></a>
+        <a class="navbar-brand" href="/"><img src="imgs/logos/logo2.svg" class="img-responsive"/></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavBar">
         <ul class="nav navbar-nav navbar-left">
           <li><a href="/">Home</a></li>
-          <li><a href="recipes">Recipes</a></li>
-          <li class="active"><a href="about">About</a></li>
           <li><a href="searchResults">Search</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li id="signup"><a href="signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-          <li id="login"><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+
+            <li id="profile"><a href="profile"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+            <li><form class="form" action="/logout" method="post"><button id="logout" class="form-control"><span class="glyphicon glyphicon-log-out"></span> Logout</button></form></li>
         </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 
     <div class="container">
       <div class="row">
-        <div id="test" class="col-md-8">
+        <div class="col-sm-0 col-md-2"></div>
+        <div id="test" class="col-sm-12 col-md-8">
           <form id="recipeData" action="/AddRecipe" onsubmit="event.preventDefault(); submitData();">
             <h1>Adding a new recipe</h1>
             <div class="form-group">
@@ -82,7 +81,7 @@ lang="en-GB" xml:lang="en-GB">
               </div>
             </div>
 
-            <div>
+            <div class="container">
               <h3>Ingredients</h3>
               <ul id="ingredients">
                 <li>
@@ -111,21 +110,34 @@ lang="en-GB" xml:lang="en-GB">
             </div>
 
             <!-- Method -->
-            <div>
-              <h3>Method</h3>
-              <ol id="methods">
-                <div class="row"><li><input type="text" class="form-control" id="method0"/></li></div>
-              </ol>
+            <div class="container">
+              <div class="row">
+                <h3>Method</h3>
+                <ol id="methods">
+                  <li><input type="text" class="form-control" id="method0"/></li>
+                </ol>
+              </div>
             </div>
             <div>
               <button type="submit" class="btn btn-success btn-block">Submit</button>
             </div>
           </form>
-          <button id="addIngredient" class="btn" onclick="addIngredient();">Add ingredient</button>
-          <button id="removeIngredient" class="btn" onclick="removeIngredient();">Remove ingredient</button>
-          <button id="addMethod" class="btn" onclick="addMethod();">Add Method step</button>
-          <button id="removeMethod" class="btn" onclick="removeMethod();">Remove Method step</button>
+          <div class="row" id="controlButtons">
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <button id="addIngredient" class="btn btn-primary btn-block" onclick="addIngredient();">+ Add ingredient</button>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <button id="addMethod" class="btn btn-primary btn-block " onclick="addMethod();">+ Add Method step</button>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <button id="removeIngredient" class="btn btn-secondary btn-block" onclick="removeIngredient();">- Remove ingredient</button>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6">
+              <button id="removeMethod" class="btn btn-secondary btn-block" onclick="removeMethod();">- Remove Method step</button>
+            </div>
+          </div>
         </div>
+        <div class="col-sm-0 col-md-2"></div>
       </div>
     </div>
 

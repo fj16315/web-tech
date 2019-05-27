@@ -17,6 +17,7 @@ lang="en-GB" xml:lang="en-GB">
   <script src="/js/generatelogin.js"></script>
   <script src="js/onloadListener.js"></script>
   <script src="js/smoothScroll.js"></script>
+  <script src="js/blurImages.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-inverse navbar-expand-md ">
@@ -27,7 +28,7 @@ lang="en-GB" xml:lang="en-GB">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="imgs/logos/logo2.svg" class="img-responsive"/></a>
+        <a class="navbar-brand" href="/"><img src="imgs/logos/logo2.svg" class="img-responsive"/></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavBar">
         <ul class="nav navbar-nav navbar-left">
@@ -52,24 +53,24 @@ lang="en-GB" xml:lang="en-GB">
 
     <div class="carousel-inner" role="listbox">
       <div class="item active">
-        <img class="d-block w-100" src="imgs/stock/ingredients.jpeg" alt="ingredients"/>
+        <img id="image1" class="d-block w-100" src="imgs/stock/ingredients.jpeg" alt="ingredients"/>
         <div class="carousel-caption d-none d-md-block">
           <h1>Welcome to Cookpot!</h1>
-          <a onclick="smoothScrollAbout();"><h2>What's cookpot?</h2></a>
+          <a onmouseover="blurImage(1);" onmouseout="unblurImage(1);" onclick="smoothScrollAbout();"><h2>What's cookpot?</h2></a>
         </div>
       </div>
       <div class="item">
-        <img class="d-block w-100" src="imgs/stock/simpleMeals.jpeg"/>
+        <img id="image2" class="d-block w-100" src="imgs/stock/simpleMeals.jpeg"/>
         <div class="carousel-caption d-none d-md-block">
           <h1>Search through community created recipes!</h1>
-          <h2><a href="searchResults">Have a look!</a></h2>
+          <h2><a onmouseover="blurImage(2);" onmouseout="unblurImage(2);" href="searchResults">Have a look!</a></h2>
         </div>
       </div>
       <div class="item">
-        <img class="d-block w-100" src="imgs/stock/share.jpeg"/>
+        <img id="image3" class="d-block w-100" src="imgs/stock/share.jpeg"/>
         <div class="carousel-caption d-none d-md-block">
           <h1>Join the club</h1>
-          <h2><a href="signup">Sign up!</a></h2>
+          <h2><a onmouseover="blurImage(3);" onmouseout="unblurImage(3);" href="signup">Sign up!</a></h2>
         </div>
       </div>
     </div>
@@ -84,13 +85,13 @@ lang="en-GB" xml:lang="en-GB">
   </div> <!--End of carousel-->
 
   <div class="container" id="about">
-      <div class="col-xs-12">
-        <h1><strong>What is Cookpot?</strong></h1>
-      </div>
-    <div class="col-sm-6 col-xs-6">
+    <div class="col-xs-12">
+      <h1><strong>What is Cookpot?</strong></h1>
+    </div>
+    <div class="col-xs-6">
       <img src="imgs/logos/logo.svg" class="img-responsive" id="aboutLogo"/>
     </div>
-    <div class="col-sm-6 col-xs-6">
+    <div class="col-xs-6">
       <p>Cookpot is a recipe sharing website for people who love cooking!</p>
     </div>
   </div>
@@ -120,66 +121,12 @@ lang="en-GB" xml:lang="en-GB">
   </div>
 
   <div class="container">
+    <h1>about us</h1>
     <div class="row">
-      <h1>about us</h1>
       <div class="col-xs-12">
-        <h2>We're some uni students who struggle to do cooking</h2>
-        <p></p>
-      </div>
-      <div class="col-md-6">
-        <img src="imgs/stock/test1.png" class="img-responsive" />
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        <h2>Some more stuff</h2>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </p>
-        <p>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      </div>
-      <div class="col-md-6">
-        <img src="imgs/stock/test1.jpg" class="img-responsive" />
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <h4>A heading</h4>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </p>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <img src="imgs/stock/test2.jpg" class="img-responsive" />
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <h4>Another heading</h4>
-        <p>
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-        <img src="imgs/stock/test3.jpg" class="img-responsive" />
-      </div>
-    </div>
-  </div>
-
-  <div class="container">
-    <div class="row">
-      <h4><a href="#hidden" data-toggle="collapse">A collapsable link!</a></h4>
-      <div id="hidden" class="collapse">
-        <h4>A Hidden header!</h4>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </p>
+        <h2>We're some uni students who love sharing recipes!</h2>
+        <p>Ever since joining uni cooking has been a new hurdle we've had to overcome. After lending of cookbooks and sharing of handwritten notes we came to the realisation that there must be an easier way.</p>
+        <p>So we made Cookpot, allowing everyone could share their recipes.</p>
       </div>
     </div>
   </div>

@@ -158,7 +158,7 @@ function hashPassword(password, salt) {
 // Checks if the user has access to the page
 function protected(req, res, next) {
   if (!req.isAuthenticated()) {
-    res.redirect('/login');
+    res.redirect('/');
     //return an error
     //return next();
   } else {
@@ -291,7 +291,7 @@ app.get('/profile', protected, function(req, res, next) {
 });
 
 // Get request for add recipe page
-app.get('/add_recipe', function(req, res, next) {
+app.get('/add_recipe', protected, function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
     res.sendFile('/recipe_creation.html', sendFileOptions, function(err) {
