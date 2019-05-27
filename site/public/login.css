@@ -67,3 +67,7 @@ h1, label, p{
 a{
    text-shadow: 0px 0px 1px white;
 }
+
+.btn-success{
+  margin-top:10px;
+}

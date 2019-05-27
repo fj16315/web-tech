@@ -1,4 +1,4 @@
-function loadUsername() {
+function loadUserProfile() {
 
   if (window.XMLHttpRequest) {
     // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -9,10 +9,14 @@ function loadUsername() {
   }
   xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      console.log("Gubbins");
-      document.getElementById("titleUsername").innerHTML = this.responseText;
+      a = JSON.parse(this.responseText);
+      console.log(a);
+
+      document.getElementById("titleUsername").innerHTML = a.username;
+      document.getElementById("recipeNum").innerHTML = "Recipes: " + a.recipe_count;
+
     }
   };
-  xmlhttp.open("GET","GetUsername",true);
+  xmlhttp.open("GET","GetUserProfile",true);
   xmlhttp.send();
 }

@@ -8,3 +8,12 @@ ul{
   margin: 0;
   padding: 0;
 }
+
+#titleUsername{
+  padding-left: 10px;
+}
+
+#recipeNum{
+  padding-top: 100px;
+  padding-bottom: 100px;
+}

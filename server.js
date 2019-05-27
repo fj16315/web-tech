@@ -73,7 +73,9 @@ let psRunDeleteSteps = db.prepare('delete from Steps where IdR = ?');
 let psRunDeleteRecipe_Ingredient = db.prepare('delete from Recipe_Ingredient where IdR = ?');
 let psRunDeleteUser = db.prepare('delete from users where IdU = ?');
 let psRunDeleteRecipe_IdU = db.prepare('delete from Recipe where IdU = ?');
-let psRunUpdateUsersRecipe_Count = db.prepare('update users set Recipe_Count = Recipe_Count + 1 where IdU = ?');
+let psRunUpdateUsersRecipe_CountIncr = db.prepare('update users set Recipe_Count = Recipe_Count + 1 where IdU = ?');
+let psGetRecipe_CountFromUsers = db.prepare('select Recipe_Count from users where IdU = ?');
+let psRunUpdateUsersRecipe_CountDecr = db.prepare('update users set Recipe_Count = Recipe_Count - 1 where IdU = ?');
 
 // Start server on specified port
 
@@ -226,7 +228,7 @@ passport.deserializeUser(function(IdU, done) {
 app.get('/', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    // res.header("Content-Type", "application/xhtml+xml");
+    res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/index.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -243,7 +245,7 @@ app.get('/', function(req, res, next) {
 app.get('/login', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    //res.header("Content-Type", "application/xhtml+xml");
+    res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/login.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -260,7 +262,7 @@ app.get('/login', function(req, res, next) {
 app.get('/about', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    //res.header("Content-Type", "application/xhtml+xml");
+    res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/about.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -277,7 +279,7 @@ app.get('/about', function(req, res, next) {
 app.get('/profile', protected, function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    //res.header("Content-Type", "application/xhtml+xml");
+    res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/profile.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -294,6 +296,7 @@ app.get('/profile', protected, function(req, res, next) {
 app.get('/add_recipe', protected, function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
+    res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/recipe_creation.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -342,7 +345,7 @@ app.get('/recipe_template', function(req, res, next) {
                 console.log("rating: " + row1.Rating);
                 console.log("steps: " + steps);
                 console.log("ingredients: " + ingredients);
-                //res.header("Content-Type", "application/xhtml+xml");
+                res.header("Content-Type", "application/xhtml+xml");
                 res.render('recipe_template', { title: row1.Title, serves: row1.Serves, rating: row1.Rating, cooking_time: row1.Cooking_Time, prep_time: row1.Prep_Time, steps: steps, ingredients: ingredients});
               }
             });
@@ -359,7 +362,7 @@ app.get('/recipe_template', function(req, res, next) {
 app.get('/signup', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    //res.header("Content-Type", "application/xhtml+xml");
+    res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/signup.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -376,7 +379,7 @@ app.get('/signup', function(req, res, next) {
 app.get('/searchResults', function(req, res, next) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   if (validUrl.isUri(fullUrl)) {
-    //res.header("Content-Type", "application/xhtml+xml");
+    res.header("Content-Type", "application/xhtml+xml");
     res.sendFile('/searchResults.html', sendFileOptions, function(err) {
       if (err) {
         next(err);
@@ -403,10 +406,17 @@ app.get('/isLoggedIn', function(req, res, next) {
 });
 
 // Get request for getting the current users username
-app.get('/GetUsername', protected, function(req, res, next) {
-  console.log("Username requested");
-  res.send(req.user.username);
-  next();
+app.get('/GetUserProfile', protected, function(req, res, next) {
+  console.log("UserProfile requested");
+  psGetRecipe_CountFromUsers.get(req.user.IdU, function(err, row) {
+    if (err) {
+      next(err);
+    } else {
+      let profile = {username: req.user.username, recipe_count: row.Recipe_Count};
+      res.send(profile);
+      next();
+    }
+  });
 });
 
 // Post requests for pages
@@ -554,7 +564,7 @@ app.post('/AddRecipe', function(req, res, next) {
               }
             });
           }
-          psRunUpdateUsersRecipe_Count.run(req.user.IdU, function(err7) {
+          psRunUpdateUsersRecipe_CountIncr.run(req.user.IdU, function(err7) {
             if (err7) {
               next(err7);
             } else {
@@ -583,9 +593,15 @@ app.post('/deleteRecipe', function(req, res, next) {
             if (err2) {
               next(err2);
             } else {
-              res.redirect('/profile');
+              psRunUpdateUsersRecipe_CountDecr.run(req.user.IdU, function(err3) {
+                if (err3) {
+                  next(err3);
+                } else {
+                  res.redirect('/profile');
+                }
+              });
             }
-          })
+          });
         }
       });
     }

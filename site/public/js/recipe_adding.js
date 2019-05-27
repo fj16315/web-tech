@@ -54,7 +54,7 @@ function addIngredient(){
     let ingredQuan = "quantity" + length;
     let ingredType = "type" + length;
     console.log(length + ", " + ingredName + ", " + ingredQuan);
-    $('#ingredients').append('<li><div class="row"><div class="col-xs-6"><input type="text" class="form-control" id="' + ingredName + '" name="' + ingredName + '"/></div><div class="col-xs-3"><input type="text"  class="form-control" id="' + ingredQuan + '" name="' + ingredQuan + '"/></div><div class="col-xs-3"><select class="form-control" id="' + ingredType + '" name=" ' + ingredType + '"><option value="tsp">Teaspoon(s)</option><option value="tbsp">Tablespoon(s)</option><option value="ml">ml</option><option value="grams">grams</option><option value="x">items</option></select></div></div></li>');
+    $('#ingredients').append('<li><div class="col-xs-6"><input type="text" class="form-control" id="' + ingredName + '" name="' + ingredName + '"/></div><div class="col-xs-3"><input type="text"  class="form-control" id="' + ingredQuan + '" name="' + ingredQuan + '"/></div><div class="col-xs-3"><select class="form-control" id="' + ingredType + '" name=" ' + ingredType + '"><option value="tsp">Teaspoon(s)</option><option value="tbsp">Tablespoon(s)</option><option value="ml">ml</option><option value="grams">grams</option><option value="x">items</option></select></div></li>');
   }
   else{
     alert("Too many ingredients!");
